@@ -1,0 +1,65 @@
+#Property file keywords
+
+= Introduction =
+
+This contains the complete list of property file keywords currently utilized by JUnitCast.
+
+
+= Required keywords =
+Parsing starts from 0 or debug_index value and increments until key is no longer found.
+
+  * casedesc# - Test case description.  Keep it short.  
+    Examples:
+    * case0=Submit confirmation
+    * case1=isEqual Test
+    * case2=Date Validation
+
+  * var# - Test variables. Define group of factors that affect the logic.
+    Examples:
+    * var0=Sunday, Monday
+    * var1=1, 2, 3
+    * var2=red, green, blue | small, medium, large | cheap, expensive
+
+  * rule# - Outcome to custom expression mapping.   
+    Examples:        
+    * rule0=OUTPUT TRUE:true|false
+    * rule0=OUTPUT TRUE:true[0]|true[1] ~ OUTPUT FALSE:false[0]&false[1]
+    * rule1=YES:!UGLY | KIND ~ ERROR : Invalid Input ~ DECLINE : Evil
+
+    Symbols: 
+    * : colon is used to separate outcome to logical expression.  
+    * ~ tilde is used to separate multiple outcomes and expression.
+    * | is used as the logical OR operator.
+    * & ampersand is used as the logical AND operator.
+    * ! exclamation is used to negate the expression.
+    * ( ) parentheses is used to enforce precedence or improve readability.
+    * \ back slash is for line continuity.
+
+  * pair# - Used to pair when there is only two outcomes.  Do not use this if you have three or more outcomes.  In this case the rule need to define only one outcome, any scenarios not met will fall into the opposite outcome defined here.
+    Example:
+    * pair0=OUTPUT TRUE:OUTPUT FALSE
+
+    Colon is used as separator.
+
+= Optional Keywords =
+  * converter# - Scenario token type converter class name.  Separated by pipe.  Default is StrConverter.
+    Examples:
+    * converter0=junitcast.converter.BoolConverter
+    * converter0=junitcast.converter.StrConverter
+    * converter0=junitcast.converter.IntConverter
+    * converter0=junitcast.converter.DblConverter
+    More will be added in the future.
+ 
+  * exempt# - Rule to exclude variable combinations.
+    Examples:
+    * exempt0=red & small
+
+  * commonvar - Same as var but this set gets included to all test cases.
+    Examples:
+    * commonvar=Morning, Evening| AM, PM
+
+  * commonexempt - Same as exempt but this rule applies to all test cases.
+    Examples:
+    * commonexempt=Morning & PM | Evening & AM
+
+

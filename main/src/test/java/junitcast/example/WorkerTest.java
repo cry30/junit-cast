@@ -93,13 +93,16 @@ public class WorkerTest extends AbstractTestCase<Worker, String> {
 
             final Variable variable = Variable.valueOf(scenarioToken
                 .replaceAll(" ", "_"));
+            
             switch (variable) {
                 case Is_Holiday:
                     Mockito.doReturn(true).when(getMockSubject()).isHoliday();
                     break;
+                    
                 case Regular_Day:
                     Mockito.doReturn(false).when(getMockSubject()).isHoliday();
                     break;
+                    
                 default:
                     final Worker.Day day = Worker.Day.valueOf(scenarioToken);
                     Mockito

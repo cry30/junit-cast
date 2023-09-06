@@ -29,7 +29,7 @@ import junitcast.ScenarioSource;
 import junitcast.converter.ElementConverter;
 
 import org.junit.runners.Parameterized.Parameters;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 /**
@@ -88,7 +88,7 @@ public class RuleProcessorTest extends
         Mockito
             .doReturn(mockRuleEval)
             .when(getMockSubject())
-            .getRuleEvaluator((List<ElementConverter>) Matchers.any());
+            .getRuleEvaluator((List<ElementConverter>) ArgumentMatchers.any());
 
 
         final ScenarioSource<String> scenSrc = new ScenarioSource<String>(this);
@@ -132,7 +132,7 @@ public class RuleProcessorTest extends
                     Mockito
                         .doThrow(new RuleEvaluatorException("Mock parse error"))
                         .when(mockRuleEval)
-                        .parse(Matchers.anyString());
+                        .parse(ArgumentMatchers.anyString());
                 }
             });
 
@@ -147,7 +147,7 @@ public class RuleProcessorTest extends
                         .doThrow(
                             new RuleEvaluatorException("Mock evaluate error"))
                         .when(mockRuleEval)
-                        .parse(Matchers.anyString());
+                        .parse(ArgumentMatchers.anyString());
                 }
             });
 
@@ -159,7 +159,7 @@ public class RuleProcessorTest extends
                 Mockito
                     .doReturn(true)
                     .when(mockRuleEval)
-                    .evaluate((List<String>) Matchers.any(), Matchers.anyMap());
+                    .evaluate((List<String>) ArgumentMatchers.any(), ArgumentMatchers.<String, ElementConverter>anyMap());
             }
         });
 

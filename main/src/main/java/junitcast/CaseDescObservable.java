@@ -40,7 +40,7 @@ public class CaseDescObservable<S> {
 
     /** */
     private final transient Map<String, AnswerObserver> enumObsMap =
-            new HashMap<String, AnswerObserver>();
+            new HashMap<>();
 
 
     /**

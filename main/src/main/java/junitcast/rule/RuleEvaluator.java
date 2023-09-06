@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T> scenario element type.
  */
-@SuppressWarnings("PMD.GodClass")
 public class RuleEvaluator<T> {
 
 

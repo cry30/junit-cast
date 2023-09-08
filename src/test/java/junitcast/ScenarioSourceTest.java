@@ -23,100 +23,87 @@ import org.junit.Test;
 /** */
 public class ScenarioSourceTest {
 
+	/** */
+	@SuppressWarnings({ "rawtypes" })
+	private final transient ScenarioSource<String> sut = new ScenarioSource<String>(
+			new AbstractTestCase<Object, String>(null) {
 
-    /** */
-    @SuppressWarnings({ "rawtypes" })
-    private final transient ScenarioSource<String> sut =
-            new ScenarioSource<String>(new AbstractTestCase<Object, String>(
-                null) {
+				@Override
+				protected void setupTargetObject(final List constructorParams) {
+				}
 
-                @Override
-                protected void setupTargetObject(final List constructorParams)
-                {}
+				@Override
+				protected void prepare() {
+				}
 
-                @Override
-                protected void prepare()
-                {}
+				@Override
+				protected void execute() {
+				}
+			});
 
-                @Override
-                protected void execute()
-                {}
-            });
+	/** */
+	@SuppressWarnings({ "rawtypes" })
+	private final transient ScenarioSource<String> sutTrans = new ScenarioSource<String>(
+			new AbstractTransientValueTestCase<Object, String, Object>(null) {
 
-    /** */
-    @SuppressWarnings({ "rawtypes" })
-    private final transient ScenarioSource<String> sutTrans =
-            new ScenarioSource<String>(
-                new AbstractTransientValueTestCase<Object, String, Object>(null) {
+				@Override
+				protected void setupTargetObject(final List constructorParams) {
+				}
 
-                    @Override
-                    protected void setupTargetObject(final List constructorParams)
-                    {}
+				@Override
+				protected void prepare() {
+				}
 
-                    @Override
-                    protected void prepare()
-                    {}
+				@Override
+				protected void execute() {
+				}
+			});
 
-                    @Override
-                    protected void execute()
-                    {}
-                });
-
-
-    /** Null Case. */
-    @SuppressWarnings("unchecked")
+	/** Null Case. */
+	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-    public void checkValidTestCase_nullTest()
-    {
-        this.sut.checkValidTestCase(null);
-    }
+	public void checkValidTestCase_nullTest() {
+		this.sut.checkValidTestCase(null);
+	}
 
-    /** Empty Case. */
-    @Test(expected = IllegalArgumentException.class)
-    public void checkValidTestCase_emptyTest()
-    {
-        this.sut.checkValidTestCase(new TestEnum[0]);
-    }
+	/** Empty Case. */
+	@Test(expected = IllegalArgumentException.class)
+	public void checkValidTestCase_emptyTest() {
+		this.sut.checkValidTestCase(new TestEnum[0]);
+	}
 
-    /** Not a sub class of Transient class. */
-    @Test(expected = UnsupportedOperationException.class)
-    public void checkValidTestCase_nonTransientTest()
-    {
-        this.sut.checkValidTestCase(new TestEnum[] { TestEnum.Item1 });
-    }
+	/** Not a sub class of Transient class. */
+	@Test(expected = UnsupportedOperationException.class)
+	public void checkValidTestCase_nonTransientTest() {
+		this.sut.checkValidTestCase(new TestEnum[] { TestEnum.Item1 });
+	}
 
-    /**  */
-    @Test
-    public void createNewCase_caseParserTest()
-    {
-        final CaseObserver<String> caseObs =
-                this.sutTrans.createNewCase(null, null, new CaseParser() {
+	/**  */
+	@Test
+	public void createNewCase_caseParserTest() {
+		final CaseObserver<String> caseObs = this.sutTrans.createNewCase(null, null, new CaseParser() {
 
-                    @Override
-                    public <E extends Enum<E>> Object parse(final E kaso)
-                    {
-                        return null;
-                    }
-                });
+			@Override
+			public <E extends Enum<E>> Object parse(final E kaso) {
+				return null;
+			}
+		});
 
-        caseObs.prepareCase(0, "test");
+		caseObs.prepareCase(0, "test");
 
-    }
+	}
 
-    /**  */
-    @Test
-    public void toStringTest()
-    {
-        Assert.assertEquals(this.sut.getClass().getSimpleName()
-                + "[] Observer size: 0", this.sut.toString());
+	/**  */
+	@Test
+	public void toStringTest() {
+		Assert.assertEquals(this.sut.getClass().getSimpleName() + "[] Observer size: 0", this.sut.toString());
 
-    }
+	}
 
-
-    /** */
-    enum TestEnum {
-        /** */
-        Item1
-    }
+	/** */
+	enum TestEnum {
+		/** */
+		Item1
+	}
 
 }

@@ -11,7 +11,7 @@
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
- *  limitations under the License. 
+ *  limitations under the License.
  */
 package junitcast.rule;
 
@@ -42,7 +42,7 @@ public class RuleProcessor<T> {
         final Rule rule = caseFixture.getRule();
         final List<Boolean> retval = new ArrayList<Boolean>();
         for (final String action : rule.getActionList()) {
-
+			System.out.println("Outcome: " + action);
             final String ruleClause = rule.getRuleClause(action);
 
             final RuleEvaluator<T> ruleEvaluator = getRuleEvaluator(caseFixture

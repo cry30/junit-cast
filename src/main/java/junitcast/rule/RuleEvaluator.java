@@ -230,6 +230,8 @@ public class RuleEvaluator<T> {
 		/* evaluating the RPN expression */
 		while (!stackRPNClone.empty()) {
 			final String token = stackRPNClone.pop().trim();
+			System.out.println("Token: " + token);
+
 			if (isOperator(token)) {
 				if (Operator.Not.toString().equals(token)) {
 					evaluateMultiNot(scenario);

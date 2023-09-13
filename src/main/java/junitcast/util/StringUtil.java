@@ -23,40 +23,41 @@ package junitcast.util;
 @SuppressWarnings("PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal" /* For easy testability. */)
 public class StringUtil {
 
-    /** Utility class. */
-    private StringUtil() {}
+	/** Utility class. */
+	private StringUtil() {
+	}
 
-    /**
-     * Trims the String content on an array of String.
-     * 
-     * @param array String array to trim contents.
-     */
-    public static String[] trimArray(final String... array)
-    {
-        String[] retval = null; //NOPMD: null default, conditionally redefine.
-        if (array != null) {
-            retval = new String[array.length];
-            System.arraycopy(array, 0, retval, 0, array.length);
-            for (int i = 0; i < retval.length; i++) {
-                if (array[i] == null) {
-                    retval[i] = array[i];
-                } else {
-                    retval[i] = array[i].trim();
-                }
-            }
+	/**
+	 * Trims the String content on an array of String.
+	 * 
+	 * @param array String array to trim contents.
+	 */
+	public static String[] trimArray(final String... array)
+	{
+		if (array == null)
+			return null;
 
-        }
-        return retval;
-    }
+		final String[] retval = new String[array.length];
+		System.arraycopy(array, 0, retval, 0, array.length);
+		for (int i = 0; i < retval.length; i++) {
+			if (array[i] == null) {
+				retval[i] = array[i];
+			} else {
+				retval[i] = array[i].trim();
+			}
+		}
 
-    /**
-     * True if string has non-null and not empty.
-     * 
-     * @param string string to check.
-     */
-    public static boolean hasValue(final String string)
-    {
-        return string != null && !"".equals(string.trim());
-    }
+		return retval;
+	}
+
+	/**
+	 * True if string has non-null and not empty.
+	 * 
+	 * @param string string to check.
+	 */
+	public static boolean hasValue(final String string)
+	{
+		return string != null && !"".equals(string.trim());
+	}
 
 }

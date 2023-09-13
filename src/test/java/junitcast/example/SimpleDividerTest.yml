@@ -9,7 +9,7 @@ test:
         - 0
         - 1
         - 2
-      converter: junitcast.converter.IntConverter
+      converter: com.github.roycetech.ruleengine.converter.IntConverter
     scenario:
       name: Divisor
       tokens:
@@ -18,7 +18,7 @@ test:
         - 0
         - 1
         - 2
-      converter: junitcast.converter.IntConverter
+      converter: com.github.roycetech.ruleengine.converter.IntConverter
   outcomes:
     ERROR: 0[1]
     '0.0':  0[0] & !0[1]

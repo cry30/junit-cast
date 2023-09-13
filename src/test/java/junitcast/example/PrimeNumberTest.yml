@@ -14,7 +14,7 @@ test:
         - 5
         - 3331
         - 5551
-      converter: junitcast.converter.IntConverter
+      converter: com.github.roycetech.ruleengine.converter.IntConverter
   outcomes:
     ERROR: -4|-1|0
     'false': 1|4|5551

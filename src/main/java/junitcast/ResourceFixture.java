@@ -2,7 +2,6 @@ package junitcast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -11,11 +10,14 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.github.roycetech.ruleengine.Rule;
 import com.github.roycetech.ruleengine.converter.ElementConverter;
 import com.github.roycetech.ruleengine.converter.StringConverter;
 
+import junitcast.initializer.VariablesInitializer;
 import junitcast.util.RuleUtil;
 import junitcast.util.StringUtil;
 
@@ -45,7 +47,7 @@ public class ResourceFixture {
 	private final transient List<String> ruleList = new ArrayList<>();
 
 	/** */
-	private final transient List<Map<String, ElementConverter>> ruleTokConverter = new ArrayList<>();
+	private final transient List<Map<String, ElementConverter>> ruleTokenConverter = new ArrayList<>();
 
 	/** Case to List of Attributes. */
 	private final transient List<List<String>> attrList = new ArrayList<>();
@@ -66,14 +68,14 @@ public class ResourceFixture {
 	private final transient ResourceBundle resourceBundle;
 
 	/** Resource file key prefix. */
-	/* default */ enum ResourceKey {
-		/** */
+	public enum ResourceKey {
+		/** Essential configurations. */
 		casedesc, var, rule, pair,
 
 		/** */
 		caseId, exempt,
 
-		/** */
+		/** Common configurations. */
 		commonexempt, commonvar,
 
 		/** */
@@ -101,7 +103,7 @@ public class ResourceFixture {
 	/* default */ void generateCases()
 	{
 		initCases();
-		initVars();
+		new VariablesInitializer(this).initialize();
 		initRules();
 		initIdentifier();
 		initExempt();
@@ -114,18 +116,22 @@ public class ResourceFixture {
 	{
 		generateCases();
 		final List<CaseFixture<String>> retval = new ArrayList<>(getCaseList().size());
-
 		for (int index = 0; index < getCaseList().size(); index++) {
 			final String caseDesc = getCaseList().toArray(new String[getCaseList().size()])[index];
-			final List<List<Object>> variables = getVarList().get(index);
+			final List<List<Object>> variables = getCaseVarList().get(index);
 
 			final Rule rule = new Rule(RuleUtil.parseRuleDefinition(getRuleList().get(index)));
 			final String pair = this.listPairMap.get(index);
 			final String exempt = getCaseExemptMap().get(index);
 			final List<String> caseId = getAttrList().get(index);
-			retval.add(new CaseFixture(caseDesc, variables, rule).pair(pair).exempt(exempt)
-					.caseIdentifier(caseId).convert(this.caseConverterList.get(index))
-					.ruleConverter(this.ruleTokConverter.get(index)));
+
+			// @formatter:off	
+			retval.add(new CaseFixture(caseDesc, variables, rule)
+					.pair(pair).exempt(exempt)
+					.caseIdentifier(caseId)
+					.convert(this.caseConverterList.get(index))
+					.ruleConverter(this.ruleTokenConverter.get(index)));
+			// @formatter:on	
 		}
 		return retval;
 	}
@@ -166,7 +172,7 @@ public class ResourceFixture {
 	 *
 	 * @return the string for the given key
 	 */
-	/* default */ String getResourceString(final String key)
+	public String getResourceString(final String key)
 	{
 		return getResourceBundle().getString(key);
 	}
@@ -176,57 +182,10 @@ public class ResourceFixture {
 	 *
 	 * @return the resource bundle instance.
 	 */
-	/* default */ ResourceBundle getResourceBundle()
+	public ResourceBundle getResourceBundle()
 	{
 		return this.resourceBundle;
 	}
-
-	/**
-	 * Initialize variables.
-	 *
-	 * @param resBundle resource bundle instance.
-	 */
-	/* default */ void initVars()
-	{
-		List<List<Object>> commonVars;
-		if (getResourceBundle().containsKey(ResourceKey.commonvar.name())) {
-			commonVars = fetchVariables(-1, ResourceKey.commonvar.name(), ",", null);
-		} else {
-			commonVars = new ArrayList<>();
-		}
-
-		for (int i = 0; i < getCaseList().size(); i++) {
-
-			final int actualIdx = i + this.debugStart;
-			final String varkey = ResourceKey.var.name() + actualIdx;
-			final String convertkey = ResourceKey.converter.name() + actualIdx;
-
-			String converters = null; // NOPMD: null default, conditionally redefine.
-			if (this.resourceBundle.containsKey(convertkey)) {
-				converters = getResourceBundle().getString(convertkey);
-			}
-
-			this.ruleTokConverter.add(new HashMap<>());
-			final List<List<Object>> caseVariables = fetchVariables(i, varkey, ",", converters);
-
-			final Set<List<Object>> specificVars = new LinkedHashSet<>();
-			caseVariables.addAll(commonVars);
-			caseVariables.addAll(specificVars);
-			getCaseVarList().add(caseVariables);
-		}
-	}
-
-//	/**
-//	 * @param resBundle resource bundle instance.
-//	 * @param caseIndex case index.
-//	 * @param key       resource key.
-//	 * @param separator values separator.
-//	 */
-//	/* default */ List<List<Object>> fetchVariables(final ResourceBundle resBundle,
-//			final int caseIndex, final String key, final String separator)
-//	{
-//		return fetchVariables(resBundle, caseIndex, key, separator, null);
-//	}
 
 	/**
 	 * @param caseIndex  case index.
@@ -234,7 +193,7 @@ public class ResourceFixture {
 	 * @param separator  values separator.
 	 * @param converters element type converter.
 	 */
-	/* default */ List<List<Object>> fetchVariables(final int caseIndex, final String key,
+	public List<List<Object>> fetchVariables(final int caseIndex, final String key,
 			final String separator, final String converters)
 	{
 		Objects.requireNonNull(key, "key cannot be null");
@@ -280,7 +239,7 @@ public class ResourceFixture {
 				final String[] nextGroupArr = StringUtil.trimArray(nextGroup.split(separator));
 				if (caseIndex > -1) { // TODO: Unsupported typed common variables.
 					for (final String string : nextGroupArr) {
-						final Map<String, ElementConverter> ruleTokenMap = this.ruleTokConverter
+						final Map<String, ElementConverter> ruleTokenMap = this.ruleTokenConverter
 								.get(caseIndex);
 						ruleTokenMap.put(string, elConvert);
 					}
@@ -320,40 +279,22 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @param nextGroupArr next group array.
-	 * @param converter    element converter.
+	 * Applies the conversion to the designated java object type to each item in the
+	 * group array.
+	 * 
+	 * @param groupArray group array.
+	 * @param converter  element converter.
 	 */
-	/* default */ List<Object> convert(final String[] nextGroupArr,
-			final ElementConverter converter)
+	/* default */ List<Object> convert(final String[] groupArray, final ElementConverter converter)
 	{
-		final List<Object> retval = new ArrayList<>();
-		for (final String string : nextGroupArr) {
-			retval.add(converter.convert(string));
-		}
-		return retval;
+		return Arrays.asList(groupArray).stream().map(converter::convert)
+				.collect(Collectors.toList());
 	}
 
-	/**
-	 * Initialize rules from resource bundle.
-	 *
-	 * @param resBundle resource bundle instance.
-	 */
-	/* default */ void initRules()
-	{
-		for (int i = 0; i < getCaseList().size(); i++) {
-			final int actualIdx = i + this.debugStart;
-
-			final String ruleRaw = this.resourceBundle
-					.getString(ResourceKey.rule.name() + actualIdx);
-			getRuleList().add(ruleRaw);
-		}
-	}
-
-	/** @param resBundle resource bundle instance. */
+	/** Initializes the case ID list. */
 	/* default */ void initIdentifier()
 	{
 		for (int i = 0; i < getCaseList().size(); i++) {
-
 			final int actualIdx = i + this.debugStart;
 			final String key = ResourceKey.caseId.name() + actualIdx;
 			if (this.resourceBundle.containsKey(key)
@@ -381,7 +322,6 @@ public class ResourceFixture {
 
 		for (int i = 0; i < getCaseList().size(); i++) {
 			final StringBuilder exemptRule = new StringBuilder();
-
 			final int actualIdx = i + this.debugStart;
 
 			final String key = String.valueOf(ResourceKey.exempt) + actualIdx;
@@ -406,19 +346,23 @@ public class ResourceFixture {
 
 	/**
 	 * Initialize pair in binary rules.
-	 *
-	 * @param resBundle resource bundle instance.
 	 */
-	/* default */ void initPair()
+	private void initPair()
 	{
-		for (int i = 0; i < getCaseList().size(); i++) {
-			final String key = ResourceKey.pair.name() + i;
-			if (this.resourceBundle.containsKey(key)) {
-				final String pairRaw = getResourceBundle().getString(key);
-				this.listPairMap.put(i, pairRaw.trim());
-			}
-		}
+		IntStream.range(0, getCaseList().size())
+				.filter(i -> getResourceBundle().containsKey(ResourceKey.pair.name() + i))
+				.forEach(i -> listPairMap.put(i,
+						getResourceBundle().getString(ResourceKey.pair.name() + i).trim()));
+	}
 
+	/**
+	 * Initialize rules from resource bundle.
+	 */
+	/* default */ void initRules()
+	{
+		IntStream.range(0, getCaseList().size()).map(i -> i + this.debugStart)
+				.mapToObj(i -> getResourceBundle().getString(ResourceKey.rule.name() + i))
+				.forEach(getRuleList()::add);
 	}
 
 	/**
@@ -427,14 +371,6 @@ public class ResourceFixture {
 	public Set<String> getCaseList()
 	{
 		return this.casesSet;
-	}
-
-	/**
-	 * @return the varList
-	 */
-	public List<List<List<Object>>> getVarList()
-	{
-		return getCaseVarList();
 	}
 
 	/**
@@ -475,11 +411,20 @@ public class ResourceFixture {
 	 *
 	 * @return debugStart property.
 	 */
-	/* default */ int getDebugStart()
+	public int getDebugStart()
 	{
 		return debugStart;
 	}
 
+	/**
+	 * Returns the rule token converters.
+	 * 
+	 * @return the ruleTokenConverter property
+	 */
+	public List<Map<String, ElementConverter>> getRuleTokenConverter()
+	{
+		return ruleTokenConverter;
+	}
 }
 
 /** Custom class exception. */

@@ -16,23 +16,29 @@ import junitcast.JUnitCastException;
  */
 public class RuleUtil {
 	/** Utility class. */
-	/* default */ RuleUtil() {
+	private RuleUtil() {
 	}
 
+	/**
+	 * Parse a rule definition mapping of outcome to clause from a rule definition
+	 * string.
+	 * 
+	 * @param ruleDefinition the mapping of outcome to clause in a text form.
+	 * 
+	 * @return a map instance with the outcome to clause mapping.
+	 */
 	public static Map<String, Object> parseRuleDefinition(final String ruleDefinition)
 	{
-		final IllegalArgumentException exception = new IllegalArgumentException();
-
 		if (ruleDefinition == null) {
 			throw new JUnitCastException("Action-to-rule must not be null");
 		} else if (ruleDefinition.trim().endsWith(",")) {
 			throw new JUnitCastException("Invalid trailing comma detected");
 		}
 
-		final Map<String, Object> ruleMap = new LinkedHashMap<String, Object>();
+		final Map<String, Object> ruleMap = new LinkedHashMap<>();
 		final String[] ruleArr = ruleDefinition.split("~");
 
-		final List<String> duplicate = new ArrayList<String>();
+		final List<String> duplicate = new ArrayList<>();
 		for (final String nextRule : ruleArr) {
 			if (!nextRule.contains(":")) {
 				throw new JUnitCastException(

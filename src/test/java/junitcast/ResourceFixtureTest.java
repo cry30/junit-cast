@@ -8,8 +8,6 @@ import java.util.ResourceBundle;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * Template Test class.
@@ -63,10 +61,6 @@ public class ResourceFixtureTest
 				prepareInitCases(scenarioToken);
 				break;
 
-			case "initVars":
-				prepareInitVars(scenarioToken);
-				break;
-
 			case "fetchVariables":
 				prepareFetchVariables(scenarioToken);
 				break;
@@ -95,29 +89,6 @@ public class ResourceFixtureTest
 		case "Invalid Debug Index":
 			Mockito.doReturn("xxx").when(getMockSubject())
 					.getResourceString(ArgumentMatchers.anyString());
-			break;
-		}
-	}
-
-	private void prepareInitVars(final String scenario)
-	{
-		Mockito.doReturn("With Common Var".equals(scenario)).when(this._resourceBundle)
-				.containsKey(ResourceFixture.ResourceKey.commonvar.name());
-
-		switch (scenario) {
-		case "With Common Var":
-			Mockito.doReturn("dummy common").when(getMockSubject())
-					.getResourceString(ResourceFixture.ResourceKey.commonvar.name());
-
-			Mockito.doAnswer(new Answer<>() {
-				@Override
-				public Object answer(final InvocationOnMock invocation) throws Throwable
-				{
-					setResult("Fetches commonvar");
-					return null;
-				}
-			}).when(getMockSubject()).fetchVariables(-1,
-					ResourceFixture.ResourceKey.commonvar.name(), ",", null);
 			break;
 		}
 	}
@@ -156,10 +127,6 @@ public class ResourceFixtureTest
 			testInitCases();
 			break;
 
-		case "initVars":
-			testInitVars();
-			break;
-
 		case "fetchVariables":
 			testFetchVariables();
 			break;
@@ -179,12 +146,6 @@ public class ResourceFixtureTest
 		} else {
 			setResult("DEBUG START NON-ZERO");
 		}
-	}
-
-	private void testInitVars()
-	{
-		setResult("Does not fetch commonvar");
-		getMockSubject().initVars();
 	}
 
 	private void testFetchVariables()

@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import junitcast.AbstractTransientValueTestCase;
 import junitcast.JUnitCastException;
+import junitcast.MockitoHelper;
 import junitcast.Parameter;
 import junitcast.ParameterGenerator;
 
@@ -26,7 +27,7 @@ public class RuleUtilTest extends AbstractTransientValueTestCase<RuleUtil, Strin
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new RuleUtil());
+		new MockitoHelper().setupTargetObject(this, constructorParams);
 	}
 
 	/**

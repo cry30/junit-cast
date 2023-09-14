@@ -15,17 +15,11 @@
  */
 package junitcast;
 
-import junitcast.ann.Revision;
-
-
 /**
- * @author $Author: $
- * @version $Date: $
  */
-@Revision("$Revision: $")
 public interface AnswerObserver {
 
-    /** Initialize mock Answers based on the current parameters. */
-    void initAnswers();
+	/** Initialize mock Answers based on the current parameters. */
+	void initAnswers();
 
 }

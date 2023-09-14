@@ -14,13 +14,10 @@ import com.github.roycetech.ruleengine.Rule;
 import com.github.roycetech.ruleengine.RuleEvaluator;
 import com.github.roycetech.ruleengine.RuleProcessor;
 
-import junitcast.util.Constant;
-
 /**
  * Implementation for junit4 parameterized test generateData static method.
  *
  * @param <T> scenario element type.
- * @author Royce Remulla
  */
 public class ParameterGenerator<T> {
 
@@ -30,10 +27,10 @@ public class ParameterGenerator<T> {
 	 *
 	 * @param resourceUri resource bundle URI.
 	 */
-	@SuppressWarnings(Constant.Warning.UNCHECKED)
 	public Collection<Object[]> genVarData(final String resourceUri)
 	{
 		final ResourceFixture resFixFactory = new ResourceFixture(resourceUri);
+		@SuppressWarnings("unchecked")
 		final List<CaseFixture<T>> fixtures = (List<CaseFixture<T>>) resFixFactory.getFixtures();
 		return generateData(fixtures);
 	}
@@ -43,7 +40,7 @@ public class ParameterGenerator<T> {
 	 *
 	 * @param resourceUri resource bundle URI.
 	 */
-	@SuppressWarnings(Constant.Warning.UNCHECKED)
+	@SuppressWarnings("unchecked")
 	public Collection<Object[]> genFixedData(final String resourceUri)
 	{
 		final ResourceFixture resFixFactory = new ResourceFixture(resourceUri);
@@ -63,7 +60,6 @@ public class ParameterGenerator<T> {
 	 * @param isComputed  false when data is fixed list other wise it is the
 	 *                    combination of all variables.
 	 */
-	@SuppressWarnings(Constant.Warning.UNCHECKED)
 	public Collection<Object[]> generateData(final List<CaseFixture<T>> fixTureList,
 			final boolean isComputed)
 	{
@@ -79,7 +75,7 @@ public class ParameterGenerator<T> {
 		if (isComputed) {
 			Collections.sort(retval, new Comparator<>() {
 				@Override
-				@SuppressWarnings("PMD.UseVarargs")
+				@SuppressWarnings({ "PMD.UseVarargs", "unchecked" })
 				public int compare(final Object[] paramArr1, final Object[] paramArr2)
 				{
 					final Parameter<T> param1 = (Parameter<T>) paramArr1[0];
@@ -99,7 +95,7 @@ public class ParameterGenerator<T> {
 	 */
 	private void addCase(final List<Object[]> paramCollection, final CaseFixture<T> caseFixture)
 	{
-		final ListMerger<T> listCombinator = new ListMerger<T>();
+		final ListMerger<T> listCombinator = new ListMerger<>();
 		final List<List<T>> combinations = listCombinator.merge(caseFixture.getVariables());
 		for (final List<T> scenario : combinations) {
 			if (isValidCase(scenario, caseFixture)) {
@@ -117,7 +113,7 @@ public class ParameterGenerator<T> {
 	 * @param paramCollection the List of Object array in parameterized test.
 	 * @param caseFixture     the case fixture.
 	 */
-	@SuppressWarnings(Constant.Warning.UNCHECKED)
+	@SuppressWarnings("unchecked")
 	private void addFixedCase(final List<Object[]> paramCollection,
 			final CaseFixture<T> caseFixture)
 	{
@@ -156,9 +152,8 @@ public class ParameterGenerator<T> {
 	{
 		final Rule rule = fixture.getRule();
 		String retval = null; // NOPMD: null default, conditionally redefine.
+		@SuppressWarnings("unchecked")
 		final List<Object> scenarioObjects = (List<Object>) scenario;
-
-//		System.out.println("Next scenario " + scenarioObjects);
 		final Boolean[] ruleResult = new RuleProcessor(rule, fixture.getRuleConverter())
 				.evaluate(scenarioObjects);
 		final List<String> outcomes = new ArrayList<>(rule.getOutcomes());

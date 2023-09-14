@@ -1,18 +1,3 @@
-/**
- *   Copyright 2013 Royce Remulla
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package junitcast.example;
 
 import java.util.Collection;
@@ -25,17 +10,15 @@ import junitcast.ParameterGenerator;
 import org.junit.runners.Parameterized.Parameters;
 
 /**
- * Test class for PrimeNumber.
- *
- * @author Royce Remulla.
+ * Template Test class.
  */
-public class PrimeNumberTest extends
-		AbstractTransientValueTestCase<PrimeNumber, Integer, Integer> {
+public class TemplateTest extends
+		AbstractTransientValueTestCase<YourClass, Integer, Integer> {
 
 	/**
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
 	 */
-	public PrimeNumberTest(final Parameter<Integer> pParameter) {
+	public TemplateTest(final Parameter<Integer> pParameter) {
 		super(pParameter);
 	}
 
@@ -43,7 +26,7 @@ public class PrimeNumberTest extends
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new PrimeNumber());
+		setMockSubject(new YourClass());
 	}
 
 	/**
@@ -57,8 +40,9 @@ public class PrimeNumberTest extends
 	@Parameters(name = "{0}")
 	public static Collection<Object[]> generateData()
 	{
-		return new ParameterGenerator<Integer>()
-			.genVarData("junitcast.example.PrimeNumberTest");
+		final String currentClassName = new Object() {
+		}.getClass().getEnclosingClass().getName();
+		return new ParameterGenerator<String>().genVarData(currentClassName);
 	}
 
 	/** {@inheritDoc} */

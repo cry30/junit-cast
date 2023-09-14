@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package junitcast.util;
 
@@ -8,20 +8,25 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import junitcast.JUnitCastException;
+
 /**
  * @author Royce Remulla
  *
  */
 public class RuleUtil {
 	/** Utility class. */
-	private RuleUtil() {
+	/* default */ RuleUtil() {
 	}
 
 	public static Map<String, Object> parseRuleDefinition(final String ruleDefinition)
 	{
-		final IllegalArgumentException exception = new IllegalArgumentException("Invalid null action to rule source.");
-		if (ruleDefinition == null || ruleDefinition.trim().endsWith(",")) {
-			throw exception;
+		final IllegalArgumentException exception = new IllegalArgumentException();
+
+		if (ruleDefinition == null) {
+			throw new JUnitCastException("Action-to-rule must not be null");
+		} else if (ruleDefinition.trim().endsWith(",")) {
+			throw new JUnitCastException("Invalid trailing comma detected");
 		}
 
 		final Map<String, Object> ruleMap = new LinkedHashMap<String, Object>();
@@ -29,14 +34,23 @@ public class RuleUtil {
 
 		final List<String> duplicate = new ArrayList<String>();
 		for (final String nextRule : ruleArr) {
+			if (!nextRule.contains(":")) {
+				throw new JUnitCastException(
+						"A colon is required to separate the outcome followed by the rule clause.");
+			}
+
 			final String[] actionClauseArr = nextRule.split(":");
-			if (ruleArr.length > 1 && (actionClauseArr.length < 2 || "".equals(actionClauseArr[1]))) {
-				throw exception;
+			if (actionClauseArr.length > 2) {
+				throw new JUnitCastException("Too many colons");
+			}
+
+			if (actionClauseArr.length == 1 || "".equals(actionClauseArr[0])) {
+				throw new JUnitCastException("Invalid colon placement");
 			}
 
 			final String action = actionClauseArr[0].trim();
 			if (duplicate.contains(action)) {
-				throw exception;
+				throw new JUnitCastException("Duplicate outcomes detected.");
 			} else {
 				duplicate.add(action);
 			}

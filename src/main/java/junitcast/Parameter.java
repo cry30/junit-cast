@@ -24,103 +24,103 @@ import java.util.List;
  */
 public class Parameter<E> {
 
+	/** Case description. */
+	private final transient String caseDesc;
 
-    /** Case description. */
-    private final transient String caseDesc;
+	/** Test scenario. */
+	private final transient List<E> scenario;
 
-    /** Test scenario. */
-    private final transient List<E> scenario;
+	/** Holds the expected result, given the current test scenario. */
+	private final transient String expected;
 
-    /** Expected result, given the current test scenario. */
-    private final transient String expected;
+	/**
+	 * Used to uniquely identify test case. Optional identifier is used to isolate
+	 * test case for multiple cases in a test class.
+	 */
+	private final transient List<String> identifier;
 
-    /**
-     * Used to uniquely identify test case. Optional identifier is used to
-     * isolate test case for multiple cases in a test class.
-     */
-    private final transient List<String> identifier;
+	/**
+	 * @param pCaseDesc   case description, must not be null.
+	 * @param pScenario   current scenario, must neither be null nor empty.
+	 * @param pExpected   expected result, must not be null or empty.
+	 * @param pIdentifier Optional case identifier.
+	 */
+	protected Parameter(final String pCaseDesc, final List<E> pScenario, final String pExpected,
+			final List<String> pIdentifier) {
+		super();
 
+		if (pCaseDesc == null || "".equals(pCaseDesc.trim())) {
+			throw new IllegalArgumentException("pExpected must not be null");
+		}
 
-    /**
-     * @param pCaseDesc case description, must not be null.
-     * @param pScenario current scenario, must neither be null nor empty.
-     * @param pExpected expected result, must not be null or empty.
-     * @param pIdentifier Optional case identifier.
-     */
-    protected Parameter(final String pCaseDesc, final List<E> pScenario,
-            final String pExpected, final List<String> pIdentifier) {
-        super();
+		if (pScenario == null || pScenario.isEmpty()) {
+			throw new IllegalArgumentException("scenario must not be null");
+		}
 
-        if (pCaseDesc == null || "".equals(pCaseDesc.trim())) {
-            throw new IllegalArgumentException("pExpected must not be null");
-        }
+		if (pExpected == null) {
+			throw new IllegalArgumentException("pExpected must not be null");
+		}
 
-        if (pScenario == null || pScenario.isEmpty()) {
-            throw new IllegalArgumentException("scenario must not be null");
-        }
+		this.caseDesc = pCaseDesc;
 
-        if (pExpected == null) {
-            throw new IllegalArgumentException("pExpected must not be null");
-        }
+		this.scenario = pScenario;
+		this.expected = pExpected;
+		this.identifier = pIdentifier;
+	}
 
-        this.caseDesc = pCaseDesc;
+	/**
+	 * Returns the expected result for the referenced test scenario.
+	 * 
+	 * @return the expected result for the referenced test scenario.
+	 */
+	public String getExpected()
+	{
+		return this.expected;
+	}
 
-        this.scenario = pScenario;
-        this.expected = pExpected;
-        this.identifier = pIdentifier;
-    }
+	/**
+	 * @return the identifier
+	 */
+	public List<String> getIdentifier()
+	{
+		return this.identifier;
+	}
 
-    /**
-     * @return the result
-     */
-    public String getExpected()
-    {
-        return this.expected;
-    }
+	public List<E> getScenario()
+	{
+		return this.scenario;
+	}
 
-    /**
-     * @return the identifier
-     */
-    public List<String> getIdentifier()
-    {
-        return this.identifier;
-    }
+	/**
+	 * This will appear in the test runner grid. New lines break the test runner so
+	 * we exclude them.
+	 *
+	 * @see {@link Object#toString()}
+	 * @return String representation of this instance.
+	 */
+	@Override
+	public String toString()
+	{
+		final StringBuilder retval = new StringBuilder().append(getCaseDesc());
 
-    public List<E> getScenario()
-    {
-        return this.scenario;
-    }
+		final boolean noNewLineExp = getExpected().indexOf('\n') < 0;
+		final boolean noNewLineScen = getScenario().toString().indexOf('\n') < 0;
+		if (noNewLineExp) {
+			retval.append(": Expect=[").append(getExpected()).append(']');
+		}
+		if (noNewLineScen) {
+			retval.append(": Scenario").append(getScenario());
+		}
 
-    /**
-     * This will appear in the test runner grid. New lines break the test runner
-     * so we exclude them.
-     *
-     * @see {@link Object#toString()}
-     * @return String representation of this instance.
-     */
-    @Override
-    public String toString()
-    {
-        final StringBuilder retval = new StringBuilder().append(getCaseDesc());
+		return retval.toString();
+	}
 
-        final boolean noNewLineExp = getExpected().indexOf('\n') < 0;
-        final boolean noNewLineScen = getScenario().toString().indexOf('\n') < 0;
-        if (noNewLineExp) {
-            retval.append(": Expect=[").append(getExpected()).append(']');
-        }
-        if (noNewLineScen) {
-            retval.append(": Scenario").append(getScenario());
-        }
-
-        return retval.toString();
-    }
-
-    /**
-     * @return the caseDesc
-     */
-    public String getCaseDesc()
-    {
-        return this.caseDesc;
-    }
+	/**
+	 * @return the caseDesc
+	 */
+	public String getCaseDesc()
+	{
+		return this.caseDesc;
+	}
 
 }

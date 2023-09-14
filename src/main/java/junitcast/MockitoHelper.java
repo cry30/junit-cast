@@ -31,130 +31,93 @@ import org.mockito.Mockito;
  */
 public class MockitoHelper {
 
-    /**
-     * @param <T> Test Object instance type. Does not support generic types, you
-     *            can omit the generic argument of test subject type. Must not
-     *            be null.
-     * 
-     * @param testCase Test case instance.
-     * @param constructorParams test subject constructor parameters.
-     */
-    @SuppressWarnings("unchecked")
-    public <T> void setupTargetObject(final AbstractTestCase<T, ?> testCase,
-                                      final List<Object> constructorParams)
-    {
-        List<Object> params;
-        if (constructorParams == null) {
-            params = new ArrayList<Object>();
-        } else {
-            params = constructorParams;
-        }
+	/**
+	 * @param <T>               Test Object instance type. Does not support generic
+	 *                          types, you can omit the generic argument of test
+	 *                          subject type. Must not be null.
+	 * 
+	 * @param testCase          Test case instance.
+	 * @param constructorParams test subject constructor parameters.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> void setupTargetObject(final AbstractTestCase<T, ?> testCase,
+			final List<Object> constructorParams)
+	{
+		final List<Object> params = constructorParams == null ? new ArrayList<>()
+				: constructorParams;
+		try {
 
-        try {
+			Constructor<T> constructor;
+			if (params.isEmpty()) {
+				constructor = (Constructor<T>) testCase.getSubjectType()
+						.getDeclaredConstructors()[0];
 
-            Constructor<T> constructor;
-            if (params.isEmpty()) {
-                constructor = (Constructor<T>) testCase
-                    .getSubjectType()
-                    .getDeclaredConstructors()[0];
+			} else {
+				constructor = (Constructor<T>) findConstructor(testCase.getSubjectType(),
+						constructorParams);
+			}
 
-            } else {
-                constructor = (Constructor<T>) findConstructor(
-                    testCase.getSubjectType(),
-                    constructorParams);
-            }
+			constructor.setAccessible(true);
+			T realSubject;
+			if (constructorParams == null) {
+				realSubject = constructor.newInstance(new Object[0]);
+			} else {
+				final int parameterCount = constructorParams.size();
+				final Object[] constructorParamsArray = constructorParams
+						.toArray(new Object[parameterCount]);
+				realSubject = constructor.newInstance(constructorParamsArray);
+			}
+			testCase.setRealSubject(realSubject);
+			testCase.setMockSubject(Mockito.spy(testCase.getRealSubject()));
+		} catch (final InvocationTargetException | IllegalArgumentException | InstantiationException
+				| IllegalAccessException any) {
+			throw new JUnitCastException(any);
+		}
+	}
 
-            if (constructor == null) {
-                throw new JUnitCastException(
-                    "Unable to autoresolve constructor based on the given arguments: "
-                            + constructorParams);
-            } else {
+	/**
+	 * Auto resolve constructor based on List of Object parameter.
+	 * 
+	 * @param klazz   class to derive constructor from.
+	 * @param pParams List of Object parameters.
+	 */
+	Constructor<?> findConstructor(final Class<?> klazz, final List<Object> pParams)
+	{
+		@SuppressWarnings("rawtypes")
+		final List<Constructor> matched = new ArrayList<Constructor>();
+		for (final Constructor<?> nextConst : klazz.getDeclaredConstructors()) {
+			if (nextConst.getParameterTypes().length == pParams.size()) {
+				matched.add(nextConst);
+				final List<Class<?>> parmTypes = getParamTypes(pParams);
+				if (Arrays.asList(nextConst.getParameterTypes()).containsAll(parmTypes)
+						&& !matched.contains(nextConst)) {
+					matched.add(nextConst);
+				}
+			}
+		}
+		if (matched.size() == 1) {
+			return matched.get(0);
+		}
 
-                constructor.setAccessible(true);
-                T realSubject;
-                if (constructorParams == null) {
-                    realSubject = constructor.newInstance(new Object[0]);
-                } else {
-                    realSubject = constructor.newInstance(constructorParams
-                        .toArray(new Object[constructorParams.size()]));
-                }
-                testCase.setRealSubject(realSubject);
-                testCase.setMockSubject(Mockito.spy(testCase.getRealSubject()));
-            }
-        } catch (final InvocationTargetException ite) {
-            throw new JUnitCastException(ite.getCause()); //NOPMD: we are concerned only on the source.
-        } catch (final IllegalArgumentException e) {
-            throw new JUnitCastException(e);
-        } catch (final InstantiationException e) {
-            throw new JUnitCastException(e);
-        } catch (final IllegalAccessException e) {
-            throw new JUnitCastException(e);
-        }
-    }
+		throw new JUnitCastException("Constructor could not be resolved.");
+	}
 
-    /**
-     * Auto resolve constructor based on List of Object parameter.
-     * 
-     * @param klazz class to derive constructor from.
-     * @param pParams List of Object parameters.
-     */
-    Constructor<?> findConstructor(final Class<?> klazz,
-                                   final List<Object> pParams)
-    {
+	/**
+	 * List of object to list of class.
+	 * 
+	 * @param objects objects to convert.
+	 */
+	List<Class<?>> getParamTypes(final List<Object> objects)
+	{
+		final List<Class<?>> retval = new ArrayList<Class<?>>();
+		for (final Object object : objects) {
+			if (object == null) {
+				retval.add(null);
+			} else {
+				retval.add(object.getClass());
+			}
 
-        @SuppressWarnings("rawtypes")
-        final List<Constructor> matched = new ArrayList<Constructor>();
-        for (final Constructor<?> nextConst : klazz.getDeclaredConstructors()) {
-            if (nextConst.getParameterTypes().length == pParams.size()) {
-                matched.add(nextConst);
-                final List<Class<?>> parmTypes = getParamTypes(pParams);
-                if (Arrays.asList(nextConst.getParameterTypes()).containsAll(
-                    parmTypes)
-                        && !matched.contains(nextConst)) {
-                    matched.add(nextConst);
-                }
-            }
-        }
-        if (matched.size() == 1) {
-            return matched.get(0);
-        } else {
-            throw new JUnitCastException("Constructor could not be resolved.");
-        }
-    }
-
-    /**
-     * List of object to list of class.
-     * 
-     * @param objects objects to convert.
-     */
-    List<Class<?>> getParamTypes(final List<Object> objects)
-    {
-        final List<Class<?>> retval = new ArrayList<Class<?>>();
-        for (final Object object : objects) {
-            if (object == null) {
-                retval.add(null);
-            } else {
-                retval.add(object.getClass());
-            }
-
-        }
-        return retval;
-    }
-
-
-    /**
-     * Reset with null check.
-     * 
-     * @param mocks varargs mocks with null checking before reset.
-     */
-    public void reset(final Object... mocks)
-    {
-        for (final Object mock : mocks) {
-            if (mock != null) {
-                Mockito.reset(mock);
-            }
-
-        }
-    }
-
+		}
+		return retval;
+	}
 }

@@ -29,54 +29,54 @@ import org.junit.runners.Parameterized.Parameters;
  * @author Royce Remulla
  */
 public class ThreeLogicCheckerTest extends
-        AbstractTransientValueTestCase<ThreeLogicChecker, Boolean, Boolean> {
+		AbstractTransientValueTestCase<ThreeLogicChecker, Boolean, Boolean> {
 
-    /**
-     * @param pParameter Data Transfer Object Parameter in Parameterized test.
-     */
-    public ThreeLogicCheckerTest(final Parameter<Boolean> pParameter) {
-        super(pParameter);
-    }
+	/**
+	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
+	 */
+	public ThreeLogicCheckerTest(final Parameter<Boolean> pParameter) {
+		super(pParameter);
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    protected void setupTargetObject(final List<Object> constructorParams)
-    {
-        new MockitoHelper().setupTargetObject(this, constructorParams);
-    }
+	/** {@inheritDoc} */
+	@Override
+	protected void setupTargetObject(final List<Object> constructorParams)
+	{
+		new MockitoHelper().setupTargetObject(this, constructorParams);
+	}
 
-    /**
-     * <pre>
-     * Test data generator.
-     * This method is called by the JUnit parameterized test runner and
-     * returns a Collection of Arrays.  For each Array in the Collection,
-     * each array element corresponds to a parameter in the constructor.
-     * </pre>
-     */
-    @Parameters(name = "{0}")
-    public static Collection<Object[]> generateData()
-    {
-        return new ParameterGenerator<Boolean>()
-            .genVarData("junitcast.example.ThreeLogicCheckerTest");
-    }
+	/**
+	 * <pre>
+	 * Test data generator.
+	 * This method is called by the JUnit parameterized test runner and
+	 * returns a Collection of Arrays.  For each Array in the Collection,
+	 * each array element corresponds to a parameter in the constructor.
+	 * </pre>
+	 */
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> generateData()
+	{
+		return new ParameterGenerator<Boolean>()
+			.genVarData("junitcast.example.ThreeLogicCheckerTest");
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    protected void prepare()
-    {
-        for (int i = 0; i < getParameter().getScenario().size(); i++) {
-            setTransientValue(i, getParameter().getScenario().get(i));
-        }
+	/** {@inheritDoc} */
+	@Override
+	protected void prepare()
+	{
+		for (int i = 0; i < getParameter().getScenario().size(); i++) {
+			setTransientValue(i, getParameter().getScenario().get(i));
+		}
 
-    }
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    protected void execute()
-    {
-        setResult(String.valueOf(getMockSubject().evaluate(
-            getTransientValue(0),
-            getTransientValue(1),
-            getTransientValue(2))));
-    }
+	/** {@inheritDoc} */
+	@Override
+	protected void execute()
+	{
+		setResult(String.valueOf(getMockSubject().evaluate(
+			getTransientValue(0),
+			getTransientValue(1),
+			getTransientValue(2))));
+	}
 }

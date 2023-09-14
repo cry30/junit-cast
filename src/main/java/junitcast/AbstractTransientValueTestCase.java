@@ -30,68 +30,68 @@ import org.junit.Before;
  *
  * @author Royce Remulla
  */
-public abstract class AbstractTransientValueTestCase<T, S, V> extends
-        AbstractTestCase<T, S> implements TransientValue<V> {
+public abstract class AbstractTransientValueTestCase<T, S, V> extends AbstractTestCase<T, S>
+		implements TransientValue<V> {
 
-    /** Case objects place holder. */
-    private transient Map<Object, V> transientMap; //= new HashMap<Object, V>();
+	/** Case objects place holder. */
+	private transient Map<Object, V> transientMap; // = new HashMap<Object, V>();
 
-    /**
-     * @param pParameter Data Transfer Object Parameter in Parameterized test..
-     * @see {@link AbstractTestCase#AbstractTestCase(Parameter)}.
-     */
-    public AbstractTransientValueTestCase(final Parameter<S> pParameter) {
-        super(pParameter);
-        this.transientMap = new HashMap<Object, V>();
-    }
+	/**
+	 * @param pParameter Data Transfer Object Parameter in Parameterized test..
+	 * @see {@link AbstractTestCase#AbstractTestCase(Parameter)}.
+	 */
+	public AbstractTransientValueTestCase(final Parameter<S> pParameter) {
+		super(pParameter);
+		this.transientMap = new HashMap<>();
+	}
 
-    /**
-     * JUnit 3 setUp().
-     *
-     * Note: transient Map is internally used thus it need to be initialized
-     * immediately before other setups.
-     */
-    @Override
-    @Before
-    public void setUp()
-    {
-        super.setUp();
-    }
+	/**
+	 * JUnit 3 setUp().
+	 *
+	 * Note: transient Map is internally used thus it need to be initialized
+	 * immediately before other setups.
+	 */
+	@Override
+	@Before
+	public void setUp()
+	{
+		super.setUp();
+	}
 
-    /** JUnit 3 tearDown(). */
-    @Override
-    @After
-    public void tearDown()
-    {
-        super.tearDown();
-        this.setTransientMap(null);
-    }
+	/** JUnit 3 tearDown(). */
+	@Override
+	@After
+	public void tearDown()
+	{
+		super.tearDown();
+		this.setTransientMap(null);
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    public V getTransientValue(final Object key)
-    {
-        return this.transientMap.get(key);
-    }
+	/** {@inheritDoc} */
+	@Override
+	public V getTransientValue(final Object key)
+	{
+		return this.transientMap.get(key);
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    public void setTransientValue(final Object key, final V pValue)
-    {
-        this.transientMap.put(key, pValue);
+	/** {@inheritDoc} */
+	@Override
+	public void setTransientValue(final Object key, final V pValue)
+	{
+		this.transientMap.put(key, pValue);
 
-    }
+	}
 
-    private void setTransientMap(final Map<Object, V> pTransientMap)
-    {
-        this.transientMap = pTransientMap;
-    }
+	private void setTransientMap(final Map<Object, V> pTransientMap)
+	{
+		this.transientMap = pTransientMap;
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    public String toString()
-    {
-        return this.transientMap == null ? "null" : getClass().getSimpleName()
-                + " " + this.transientMap.toString();
-    }
+//    /** {@inheritDoc} */
+//    @Override
+//    public String toString()
+//    {
+//        return this.transientMap == null ? "null" : getClass().getSimpleName()
+//                + " " + this.transientMap.toString();
+//    }
 }

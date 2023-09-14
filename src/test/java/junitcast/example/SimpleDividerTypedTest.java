@@ -33,56 +33,56 @@ import org.junit.runners.Parameterized.Parameters;
  * @author Royce Remulla.
  */
 public class SimpleDividerTypedTest extends
-        AbstractTransientValueTestCase<SimpleDivider, Integer, Integer> {
+		AbstractTransientValueTestCase<SimpleDivider, Integer, Integer> {
 
-    /**
-     * @param pParameter Data Transfer Object Parameter in Parameterized test.
-     */
-    public SimpleDividerTypedTest(final Parameter<Integer> pParameter) {
-        super(pParameter);
-    }
+	/**
+	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
+	 */
+	public SimpleDividerTypedTest(final Parameter<Integer> pParameter) {
+		super(pParameter);
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    protected void setupTargetObject(final List<Object> constructorParams)
-    {
-        new MockitoHelper().setupTargetObject(this, constructorParams);
-    }
+	/** {@inheritDoc} */
+	@Override
+	protected void setupTargetObject(final List<Object> constructorParams)
+	{
+		new MockitoHelper().setupTargetObject(this, constructorParams);
+	}
 
-    /**
-     * <pre>
-     * Test data generator.
-     * This method is called by the JUnit parameterized test runner and
-     * returns a Collection of Arrays.  For each Array in the Collection,
-     * each array element corresponds to a parameter in the constructor.
-     * </pre>
-     */
-    @Parameters(name = "{0}")
-    public static Collection<Object[]> generateData()
-    {
-        return new ParameterGenerator<String>()
-            .genVarData("junitcast.example.SimpleDividerTypedTest");
-    }
+	/**
+	 * <pre>
+	 * Test data generator.
+	 * This method is called by the JUnit parameterized test runner and
+	 * returns a Collection of Arrays.  For each Array in the Collection,
+	 * each array element corresponds to a parameter in the constructor.
+	 * </pre>
+	 */
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> generateData()
+	{
+		return new ParameterGenerator<String>()
+			.genVarData("junitcast.example.SimpleDividerTypedTest");
+	}
 
-    /** {@inheritDoc} */
-    @Override
-    protected void prepare()
-    {
-        for (int i = 0; i < getParameter().getScenario().size(); i++) {
-            setTransientValue(i, getParameter().getScenario().get(i));
-        }
-    }
+	/** {@inheritDoc} */
+	@Override
+	protected void prepare()
+	{
+		for (int i = 0; i < getParameter().getScenario().size(); i++) {
+			setTransientValue(i, getParameter().getScenario().get(i));
+		}
+	}
 
-    @Override
-    protected void execute()
-    {
-        final int dividend = getTransientValue(0);
-        final int divisor = getTransientValue(1);
-        try {
-            setResult(getMockSubject().divide(dividend, divisor));
-        } catch (final IllegalArgumentException iae) {
-            setResult("ERROR");
-        }
-    }
+	@Override
+	protected void execute()
+	{
+		final int dividend = getTransientValue(0);
+		final int divisor = getTransientValue(1);
+		try {
+			setResult(getMockSubject().divide(dividend, divisor));
+		} catch (final IllegalArgumentException iae) {
+			setResult("ERROR");
+		}
+	}
 
 }

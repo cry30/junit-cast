@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,11 +62,11 @@ public class ResourceFixture {
 	/** Converter map. */
 	private static Map<Class<? extends ElementConverter>, ElementConverter> convertMap = new ConcurrentHashMap<>();
 
-	/** */
-	private final transient String resourceUri;
+	/** The configuration to be parsed by this instance. */
+	private final transient ResourceBundle resourceBundle;
 
 	/** Resource file key prefix. */
-	private enum ResourceKey {
+	/* default */ enum ResourceKey {
 		/** */
 		casedesc, var, rule, pair,
 
@@ -82,8 +83,13 @@ public class ResourceFixture {
 	/**
 	 * @param pResource resource uri.
 	 */
-	public ResourceFixture(final String pResource) {
-		this.resourceUri = pResource;
+	public ResourceFixture(final String resourceUri) {
+		if (resourceUri == null) {
+			this.resourceBundle = null;
+		} else {
+			this.resourceBundle = ResourceBundle.getBundle(resourceUri, Locale.getDefault(),
+					ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+		}
 	}
 
 	/**
@@ -94,15 +100,12 @@ public class ResourceFixture {
 	 */
 	/* default */ void generateCases()
 	{
-		final ResourceBundle resBundle = ResourceBundle.getBundle(this.resourceUri,
-				Locale.getDefault(),
-				ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_PROPERTIES));
-		initCases(resBundle);
-		initVars(resBundle);
-		initRules(resBundle);
-		initIdentifier(resBundle);
-		initExempt(resBundle);
-		initPair(resBundle);
+		initCases();
+		initVars();
+		initRules();
+		initIdentifier();
+		initExempt();
+		initPair();
 	}
 
 	/** */
@@ -132,10 +135,10 @@ public class ResourceFixture {
 	 *
 	 * @param resBundle resource bundle instance.
 	 */
-	/* default */ final void initCases(final ResourceBundle resBundle)
+	/* default */ final void initCases()
 	{
-		if (resBundle.containsKey(ResourceKey.debug_index.name())) {
-			final String debugStartStr = resBundle.getString(ResourceKey.debug_index.name()).trim();
+		if (getResourceBundle().containsKey(ResourceKey.debug_index.name())) {
+			final String debugStartStr = getResourceString(ResourceKey.debug_index.name()).trim();
 			try {
 				this.debugStart = Integer.valueOf(debugStartStr);
 			} catch (final NumberFormatException e) {
@@ -146,10 +149,10 @@ public class ResourceFixture {
 		}
 
 		int caseIndex = this.debugStart;
-		while (true) {
+		while (true && caseIndex < 10) {
 			final String key = ResourceKey.casedesc.name() + caseIndex++;
-			if (resBundle.containsKey(key)) {
-				final String kaso = resBundle.getString(key);
+			if (getResourceBundle().containsKey(key)) {
+				final String kaso = getResourceString(key);
 				getCaseList().add(kaso.trim());
 			} else {
 				break;
@@ -158,15 +161,36 @@ public class ResourceFixture {
 	}
 
 	/**
+	 * Gets a string for the given key from this resource bundle. This method is
+	 * created for testability.
+	 *
+	 * @return the string for the given key
+	 */
+	/* default */ String getResourceString(final String key)
+	{
+		return getResourceBundle().getString(key);
+	}
+
+	/**
+	 * Makes the resourceBundle available for testing.
+	 *
+	 * @return the resource bundle instance.
+	 */
+	/* default */ ResourceBundle getResourceBundle()
+	{
+		return this.resourceBundle;
+	}
+
+	/**
 	 * Initialize variables.
 	 *
 	 * @param resBundle resource bundle instance.
 	 */
-	/* default */ void initVars(final ResourceBundle resBundle)
+	/* default */ void initVars()
 	{
 		List<List<Object>> commonVars;
-		if (resBundle.containsKey(ResourceKey.commonvar.name())) {
-			commonVars = fetchVariables(resBundle, -1, ResourceKey.commonvar.name(), ",");
+		if (getResourceBundle().containsKey(ResourceKey.commonvar.name())) {
+			commonVars = fetchVariables(-1, ResourceKey.commonvar.name(), ",", null);
 		} else {
 			commonVars = new ArrayList<>();
 		}
@@ -178,56 +202,49 @@ public class ResourceFixture {
 			final String convertkey = ResourceKey.converter.name() + actualIdx;
 
 			String converters = null; // NOPMD: null default, conditionally redefine.
-			if (resBundle.containsKey(convertkey)) {
-				converters = resBundle.getString(convertkey);
+			if (this.resourceBundle.containsKey(convertkey)) {
+				converters = getResourceBundle().getString(convertkey);
 			}
 
-			this.ruleTokConverter.add(new HashMap<String, ElementConverter>()); // NOPMD: False
-																				// Positive.
-			final List<List<Object>> caseVariables = fetchVariables(resBundle, i, varkey, ",",
-					converters);
+			this.ruleTokConverter.add(new HashMap<>());
+			final List<List<Object>> caseVariables = fetchVariables(i, varkey, ",", converters);
 
-			final Set<List<Object>> specificVars = new LinkedHashSet<List<Object>>(); // NOPMD:
-																						// False
-																						// Positive.
+			final Set<List<Object>> specificVars = new LinkedHashSet<>();
 			caseVariables.addAll(commonVars);
-
 			caseVariables.addAll(specificVars);
 			getCaseVarList().add(caseVariables);
 		}
 	}
 
-	/**
-	 * @param resBundle resource bundle instance.
-	 * @param caseIndex case index.
-	 * @param key       resource key.
-	 * @param separator values separator.
-	 */
-	/* default */ List<List<Object>> fetchVariables(final ResourceBundle resBundle,
-			final int caseIndex, final String key, final String separator)
-	{
-		return fetchVariables(resBundle, caseIndex, key, separator, null);
-	}
+//	/**
+//	 * @param resBundle resource bundle instance.
+//	 * @param caseIndex case index.
+//	 * @param key       resource key.
+//	 * @param separator values separator.
+//	 */
+//	/* default */ List<List<Object>> fetchVariables(final ResourceBundle resBundle,
+//			final int caseIndex, final String key, final String separator)
+//	{
+//		return fetchVariables(resBundle, caseIndex, key, separator, null);
+//	}
 
 	/**
-	 * @param resBundle  resource bundle instance.
 	 * @param caseIndex  case index.
 	 * @param key        resource key.
 	 * @param separator  values separator.
 	 * @param converters element type converter.
 	 */
-	/* default */ List<List<Object>> fetchVariables(final ResourceBundle resBundle,
-			final int caseIndex, final String key, final String separator, final String converters)
+	/* default */ List<List<Object>> fetchVariables(final int caseIndex, final String key,
+			final String separator, final String converters)
 	{
+		Objects.requireNonNull(key, "key cannot be null");
 
-		List<List<Object>> retval;
-		if (resBundle.containsKey(key)) {
-			final String commonVarRaw = resBundle.getString(key);
-			retval = extractCombinations(caseIndex, commonVarRaw, separator, converters);
-		} else {
-			retval = new ArrayList<>();
+		if (getResourceBundle().containsKey(key)) {
+			final String commonVarRaw = getResourceString(key);
+			return extractCombinations(caseIndex, commonVarRaw, separator, converters);
 		}
-		return retval;
+
+		return new ArrayList<>();
 	}
 
 	/**
@@ -256,7 +273,6 @@ public class ResourceFixture {
 		final List<List<Object>> caseComb = new ArrayList<>();
 		for (int i = 0; i < rawGroup.length; i++) {
 			final String nextGroup = rawGroup[i];
-
 			final ElementConverter elConvert = getConverter(converterArr[i]);
 			elConvList.add(elConvert);
 
@@ -322,25 +338,27 @@ public class ResourceFixture {
 	 *
 	 * @param resBundle resource bundle instance.
 	 */
-	/* default */ void initRules(final ResourceBundle resBundle)
+	/* default */ void initRules()
 	{
 		for (int i = 0; i < getCaseList().size(); i++) {
 			final int actualIdx = i + this.debugStart;
 
-			final String ruleRaw = resBundle.getString(ResourceKey.rule.name() + actualIdx);
+			final String ruleRaw = this.resourceBundle
+					.getString(ResourceKey.rule.name() + actualIdx);
 			getRuleList().add(ruleRaw);
 		}
 	}
 
 	/** @param resBundle resource bundle instance. */
-	/* default */ void initIdentifier(final ResourceBundle resBundle)
+	/* default */ void initIdentifier()
 	{
 		for (int i = 0; i < getCaseList().size(); i++) {
 
 			final int actualIdx = i + this.debugStart;
 			final String key = ResourceKey.caseId.name() + actualIdx;
-			if (resBundle.containsKey(key) && !"".equals(resBundle.getString(key).trim())) {
-				final String raw = resBundle.getString(key);
+			if (this.resourceBundle.containsKey(key)
+					&& !"".equals(getResourceBundle().getString(key).trim())) {
+				final String raw = getResourceBundle().getString(key);
 				getAttrList().add(Arrays.asList(StringUtil.trimArray(raw.split(","))));
 			} else {
 				final String caseId = getCaseList().toArray(new String[getCaseList().size()])[i];
@@ -354,11 +372,11 @@ public class ResourceFixture {
 	 *
 	 * @param resBundle resource bundle instance.
 	 */
-	/* default */ void initExempt(final ResourceBundle resBundle)
+	/* default */ void initExempt()
 	{
 		String commonExempt = null; // NOPMD: null default, conditionally redefine.
-		if (resBundle.containsKey(ResourceKey.commonexempt.name())) {
-			commonExempt = resBundle.getString(ResourceKey.commonexempt.name());
+		if (this.resourceBundle.containsKey(ResourceKey.commonexempt.name())) {
+			commonExempt = getResourceBundle().getString(ResourceKey.commonexempt.name());
 		}
 
 		for (int i = 0; i < getCaseList().size(); i++) {
@@ -368,8 +386,8 @@ public class ResourceFixture {
 
 			final String key = String.valueOf(ResourceKey.exempt) + actualIdx;
 			String caseExempt = null; // NOPMD: null default, conditionally redefine.
-			if (resBundle.containsKey(key)) {
-				caseExempt = resBundle.getString(key);
+			if (this.resourceBundle.containsKey(key)) {
+				caseExempt = getResourceBundle().getString(key);
 			}
 
 			if (StringUtil.hasValue(commonExempt) && StringUtil.hasValue(caseExempt)) {
@@ -391,12 +409,12 @@ public class ResourceFixture {
 	 *
 	 * @param resBundle resource bundle instance.
 	 */
-	/* default */ void initPair(final ResourceBundle resBundle)
+	/* default */ void initPair()
 	{
 		for (int i = 0; i < getCaseList().size(); i++) {
 			final String key = ResourceKey.pair.name() + i;
-			if (resBundle.containsKey(key)) {
-				final String pairRaw = resBundle.getString(key);
+			if (this.resourceBundle.containsKey(key)) {
+				final String pairRaw = getResourceBundle().getString(key);
 				this.listPairMap.put(i, pairRaw.trim());
 			}
 		}
@@ -453,11 +471,13 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @return the resource
+	 * Returns the debugStart property for test-ability purpose.
+	 *
+	 * @return debugStart property.
 	 */
-	public String getResourceUri()
+	/* default */ int getDebugStart()
 	{
-		return this.resourceUri;
+		return debugStart;
 	}
 
 }

@@ -30,63 +30,63 @@ import org.mockito.Mockito;
 //<Worker, String> refers to the subject class, data type of scenario.
 public class WorkerBlogTest extends AbstractTestCase<Worker, String> {
 
-    //Parameter is the scenario/stick data transfer object.
-    public WorkerBlogTest(final Parameter<String> pParameter) {super(pParameter);}
+	//Parameter is the scenario/stick data transfer object.
+	public WorkerBlogTest(final Parameter<String> pParameter) {super(pParameter);}
 
-    //This will instantiate the subject.
-    @Override
-    protected void setupTargetObject(final List<Object> constructorParams) {
-        new MockitoHelper().setupTargetObject(this, constructorParams);
-    }
+	//This will instantiate the subject.
+	@Override
+	protected void setupTargetObject(final List<Object> constructorParams) {
+		new MockitoHelper().setupTargetObject(this, constructorParams);
+	}
 
-    //Optional enum to reference to all the variables defined in the property file.
-    enum Variable { Is_Holiday, Regular_Day, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday }
+	//Optional enum to reference to all the variables defined in the property file.
+	enum Variable { Is_Holiday, Regular_Day, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday }
 
-    //Optional enum to reference the possible outcomes defined in the property file.
-    enum Result {
-        Rest, Go_to_work;
-        public String value() {
-            return super.name().replaceAll("_", " ");
-        }
-    }
+	//Optional enum to reference the possible outcomes defined in the property file.
+	enum Result {
+		Rest, Go_to_work;
+		public String value() {
+			return super.name().replaceAll("_", " ");
+		}
+	}
 
 
-    //This is the parameter generator required by JUnit parameterized test runner.
-    //This is where the popsicle sticks are constructed.
-    @Parameters(name = "{0}")
-    public static Collection<Object[]> generateData() {
-        return new ParameterGenerator<String>().genVarData("junitcast.example.WorkerTest");
-    }
+	//This is the parameter generator required by JUnit parameterized test runner.
+	//This is where the popsicle sticks are constructed.
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> generateData() {
+		return new ParameterGenerator<String>().genVarData("junitcast.example.WorkerTest");
+	}
 
-    //Step 1 of the PEA pattern.
-    @Override
-    protected void prepare() {
-        for (final String scenarioToken : getParameter().getScenario()) {
-            final Variable variable = Variable.valueOf(scenarioToken.replaceAll(" ", "_"));
-            switch (variable) {
-                case Is_Holiday:
-                    Mockito.doReturn(true).when(getMockSubject()).isHoliday();
-                    break;
-                case Regular_Day:
-                    Mockito.doReturn(false).when(getMockSubject()).isHoliday(); //can be ommitted.
-                    break;
-                default:
-                    final Worker.Day day = Worker.Day.valueOf(scenarioToken);
-                    Mockito.doReturn(day).when(getMockSubject()).getDayOfTheWeek();
-                    break;
-            }
-        }
-    }
+	//Step 1 of the PEA pattern.
+	@Override
+	protected void prepare() {
+		for (final String scenarioToken : getParameter().getScenario()) {
+			final Variable variable = Variable.valueOf(scenarioToken.replaceAll(" ", "_"));
+			switch (variable) {
+				case Is_Holiday:
+					Mockito.doReturn(true).when(getMockSubject()).isHoliday();
+					break;
+				case Regular_Day:
+					Mockito.doReturn(false).when(getMockSubject()).isHoliday(); //can be ommitted.
+					break;
+				default:
+					final Worker.Day day = Worker.Day.valueOf(scenarioToken);
+					Mockito.doReturn(day).when(getMockSubject()).getDayOfTheWeek();
+					break;
+			}
+		}
+	}
 
-    //Step 2. of the PEA pattern.
-    @Override
-    protected void execute() {
-        if (getMockSubject().hasWork(null)) {
-            setResult(Result.Go_to_work.value());
-        } else {
-            setResult(Result.Rest.value());
-        }
-    }
+	//Step 2. of the PEA pattern.
+	@Override
+	protected void execute() {
+		if (getMockSubject().hasWork(null)) {
+			setResult(Result.Go_to_work.value());
+		} else {
+			setResult(Result.Rest.value());
+		}
+	}
 
-    //Step 3 (Assertion) of the PEA pattern is taken care of internally by the super class.
+	//Step 3 (Assertion) of the PEA pattern is taken care of internally by the super class.
 }

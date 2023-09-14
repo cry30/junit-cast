@@ -43,182 +43,182 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public abstract class AbstractTestCase<T, E> {
 
-    /** Parameterized runner composite parameter. */
-    private final transient Parameter<E> parameter;
+	/** Parameterized runner composite parameter. */
+	private final transient Parameter<E> parameter;
 
-    /** Test class type to be derived as parameter type of test subclass. */
-    private Class<T> subjectType;
+	/** Test class type to be derived as parameter type of test subclass. */
+	private Class<T> subjectType;
 
-    /** Mock object instance to test. */
-    private transient T mockSubject;
+	/** Mock object instance to test. */
+	private transient T mockSubject;
 
-    /** Internal. Real object instance. */
-    private transient T realSubject;
+	/** Internal. Real object instance. */
+	private transient T realSubject;
 
-    /** Optional result place holder bean property. */
-    private transient Object result;
+	/** Optional result place holder bean property. */
+	private transient Object result;
 
+	/**
+	 * @param pParameter data transfer object to be injected by Parameterized test
+	 *                   runner.
+	 */
+	@SuppressWarnings("unchecked")
+	protected AbstractTestCase(final Parameter<E> pParameter) {
+		this.parameter = pParameter;
+		if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
+			final ParameterizedType paramedType = (ParameterizedType) getClass()
+					.getGenericSuperclass();
+			Class<T> subjecType;
+			final Type type = paramedType.getActualTypeArguments()[0];
+			if (type instanceof ParameterizedType) {
+				subjecType = (Class<T>) ((ParameterizedType) type).getRawType();
+			} else {
+				subjecType = (Class<T>) paramedType.getActualTypeArguments()[0];
+			}
+			this.setSubjectType(subjecType);
+//		} else {
+//			throw new UnsupportedOperationException("Must use parameterized sub type.");
+		}
+	}
 
-    /**
-     * @param pParameter data transfer object to be injected by Parameterized
-     *            test runner.
-     */
-    @SuppressWarnings("unchecked")
-    protected AbstractTestCase(final Parameter<E> pParameter) {
-        this.parameter = pParameter;
-        if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
-            final ParameterizedType paramedType =
-                    (ParameterizedType) getClass().getGenericSuperclass();
-            Class<T> subjecType;
-            final Type type = paramedType.getActualTypeArguments()[0];
-            if (type instanceof ParameterizedType) {
-                subjecType = (Class<T>) ((ParameterizedType) type).getRawType();
-            } else {
-                subjecType = (Class<T>) paramedType.getActualTypeArguments()[0];
-            }
-            this.setSubjectType(subjecType);
-        } else {
-            throw new UnsupportedOperationException(
-                "Must use parameterized sub type.");
-        }
-    }
+	/** JUnit 3 setUp(). */
+	@Before
+	public void setUp()
+	{
+		setupTargetObject(null);
+	}
 
-    /** JUnit 3 setUp(). */
-    @Before
-    public void setUp()
-    {
-        setupTargetObject(null);
-    }
+	/** JUnit 3 tearDown(). */
+	@After
+	public void tearDown()
+	{
+		setMockSubject(null);
+		setRealSubject(null);
+		setSubjectType(null);
+		setResult(null);
+	}
 
-    /** JUnit 3 tearDown(). */
-    @After
-    public void tearDown()
-    {
-        setMockSubject(null);
-        setRealSubject(null);
-        setSubjectType(null);
-        setResult(null);
-    }
+	/**
+	 * Setup the test object instance. Override this for custom implementation.
+	 *
+	 * @param constructorParams test subject constructor parameters.
+	 */
+	protected abstract void setupTargetObject(List<Object> constructorParams);
 
-    /**
-     * Setup the test object instance. Override this for custom implementation.
-     *
-     * @param constructorParams test subject constructor parameters.
-     */
-    protected abstract void setupTargetObject(List<Object> constructorParams);
+	/**
+	 * Preparation. Go through each scenarios and handle necessary preparations
+	 * before the the subject in test is executed.
+	 */
+	protected abstract void prepare();
 
-    /** Preparation. */
-    protected abstract void prepare();
+	/**
+	 * Execution. Result output and exception must be converted to a valid output
+	 * token to be processed during assertion/verification.
+	 *
+	 * @return output matching the rule in the property file.
+	 */
+	protected abstract void execute();
 
-    /**
-     * Execution. Result output and exception must be converted to a valid
-     * output token to be processed during assertion/verification.
-     *
-     * @return output matching the rule in the property file.
-     */
-    protected abstract void execute();
+	/**
+	 * Assertion/Verification.
+	 *
+	 * @param pResult execution result.
+	 */
+	protected void assertVerify(final Object pResult)
+	{
+		String resultString;
+		if (pResult == null) {
+			resultString = "null";
+		} else {
+			resultString = pResult.toString();
+		}
 
-    /**
-     * Assertion/Verification.
-     *
-     * @param pResult execution result.
-     */
-    protected void assertVerify(final Object pResult)
-    {
-        String resultString;
-        if (pResult == null) {
-            resultString = "null";
-        } else {
-            resultString = pResult.toString();
-        }
+		Assert.assertEquals(getParameter().toString(), getParameter().getExpected(), resultString);
+	}
 
-        Assert.assertEquals(getParameter().toString(), getParameter()
-            .getExpected(), resultString);
-    }
+	/**
+	 * Default test method to catch all scenario test.
+	 */
+	@Test
+	public void cast()
+	{
+		// Preparation.
+		prepare();
 
-    /**
-     * Default test method to catch all scenario test.
-     */
-    @Test
-    public void cast()
-    {
-        // Preparation.
-        prepare();
+		// Execution.
+		execute();
 
-        // Execution.
-        execute();
+		// Assertion/Verification.
+		assertVerify(getResult());
+	}
 
-        // Assertion/Verification.
-        assertVerify(getResult());
-    }
+	/**
+	 * @return the mock instance.
+	 */
+	protected T getMockSubject()
+	{
+		return this.mockSubject;
+	}
 
-    /**
-     * @return the mock instance.
-     */
-    protected T getMockSubject()
-    {
-        return this.mockSubject;
-    }
+	/**
+	 * @param pMockSubject test subject instance.
+	 */
+	protected void setMockSubject(final T pMockSubject)
+	{
+		this.mockSubject = pMockSubject;
+	}
 
-    /**
-     * @param pMockSubject test subject instance.
-     */
-    protected void setMockSubject(final T pMockSubject)
-    {
-        this.mockSubject = pMockSubject;
-    }
+	/**
+	 * @return the realObject
+	 */
+	public T getRealSubject()
+	{
+		return this.realSubject;
+	}
 
-    /**
-     * @return the realObject
-     */
-    public T getRealSubject()
-    {
-        return this.realSubject;
-    }
+	/**
+	 * @param realObject the realObject to set
+	 */
+	protected void setRealSubject(final T realObject)
+	{
+		this.realSubject = realObject;
+	}
 
-    /**
-     * @param realObject the realObject to set
-     */
-    protected void setRealSubject(final T realObject)
-    {
-        this.realSubject = realObject;
-    }
+	/**
+	 * @return the targetType
+	 */
+	protected Class<T> getSubjectType()
+	{
+		return this.subjectType;
+	}
 
-    /**
-     * @return the targetType
-     */
-    protected Class<T> getSubjectType()
-    {
-        return this.subjectType;
-    }
+	/**
+	 * @param pSubjectType the subjectType to set
+	 */
+	private void setSubjectType(final Class<T> pSubjectType)
+	{
+		this.subjectType = pSubjectType;
+	}
 
-    /**
-     * @param pSubjectType the subjectType to set
-     */
-    private void setSubjectType(final Class<T> pSubjectType)
-    {
-        this.subjectType = pSubjectType;
-    }
+	public Parameter<E> getParameter()
+	{
+		return this.parameter;
+	}
 
-    public Parameter<E> getParameter()
-    {
-        return this.parameter;
-    }
+	/**
+	 * Transient place holder for execution result.
+	 */
+	public Object getResult()
+	{
+		return this.result;
+	}
 
-    /**
-     * Transient place holder for execution result.
-     */
-    public Object getResult()
-    {
-        return this.result;
-    }
-
-    /**
-     * @param pResult the result to set
-     */
-    public void setResult(final Object pResult)
-    {
-        this.result = pResult;
-    }
+	/**
+	 * @param pResult the result to set
+	 */
+	public void setResult(final Object pResult)
+	{
+		this.result = pResult;
+	}
 
 }

@@ -26,53 +26,53 @@ import org.junit.runners.Parameterized.Parameters;
 
 /** Test class for logic checker. */
 public class LogicCheckerTest extends
-        AbstractTransientValueTestCase<LogicChecker, Boolean, Boolean> {
+		AbstractTransientValueTestCase<LogicChecker, Boolean, Boolean> {
 
-    /** @param pParameter Data Transfer Object Parameter in Parameterized test. */
-    public LogicCheckerTest(final Parameter<Boolean> pParameter) {
-        super(pParameter);
-    }
+	/** @param pParameter Data Transfer Object Parameter in Parameterized test. */
+	public LogicCheckerTest(final Parameter<Boolean> pParameter) {
+		super(pParameter);
+	}
 
-    /** */
-    enum Argument {
-        /** */
-        first, second
-    }
+	/** */
+	enum Argument {
+		/** */
+		first, second
+	}
 
-    @Override
-    protected void setupTargetObject(final List<Object> constructorParams)
-    {
-        setMockSubject(new LogicChecker());
-    }
+	@Override
+	protected void setupTargetObject(final List<Object> constructorParams)
+	{
+		setMockSubject(new LogicChecker());
+	}
 
-    /**
-     * <pre>
-     * Test data generator.
-     * This method is called by the JUnit parameterized test runner and
-     * returns a Collection of Arrays.  For each Array in the Collection,
-     * each array element corresponds to a parameter in the constructor.
-     * </pre>
-     */
-    @Parameters(name = "{0}")
-    public static Collection<Object[]> generateData()
-    {
-        return new ParameterGenerator<Integer>()
-            .genVarData("junitcast.example.LogicCheckerTest");
-    }
+	/**
+	 * <pre>
+	 * Test data generator.
+	 * This method is called by the JUnit parameterized test runner and
+	 * returns a Collection of Arrays.  For each Array in the Collection,
+	 * each array element corresponds to a parameter in the constructor.
+	 * </pre>
+	 */
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> generateData()
+	{
+		return new ParameterGenerator<Integer>()
+			.genVarData("junitcast.example.LogicCheckerTest");
+	}
 
-    @Override
-    protected void prepare()
-    {
-        for (int i = 0; i < getParameter().getScenario().size(); i++) {
-            setTransientValue(i, getParameter().getScenario().get(i));
-        }
-    }
+	@Override
+	protected void prepare()
+	{
+		for (int i = 0; i < getParameter().getScenario().size(); i++) {
+			setTransientValue(i, getParameter().getScenario().get(i));
+		}
+	}
 
-    @Override
-    protected void execute()
-    {
-        setResult(getMockSubject().and(
-            getTransientValue(Argument.first.ordinal()),
-            getTransientValue(Argument.second.ordinal())));
-    }
+	@Override
+	protected void execute()
+	{
+		setResult(getMockSubject().and(
+			getTransientValue(Argument.first.ordinal()),
+			getTransientValue(Argument.second.ordinal())));
+	}
 }

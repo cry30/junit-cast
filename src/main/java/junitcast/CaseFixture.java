@@ -11,7 +11,7 @@
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
- *  limitations under the License. 
+ *  limitations under the License.
  */
 package junitcast;
 
@@ -25,7 +25,7 @@ import com.github.roycetech.ruleengine.converter.ElementConverter;
 
 /**
  * @param <T> scenario tokens type.
- * 
+ *
  * @author Royce Remulla
  */
 public class CaseFixture<T> {
@@ -35,9 +35,6 @@ public class CaseFixture<T> {
 
 	/** */
 	private final transient List<List<T>> variables;
-
-	/** */
-	private transient List<ElementConverter> converters;
 
 	/** Rule token converter. */
 	private transient Map<String, ElementConverter> ruleConv;
@@ -78,16 +75,16 @@ public class CaseFixture<T> {
 	public CaseFixture(final String pCaseDesc, final List<List<T>> pVariables, final Rule pRule,
 			final String pPair) {
 		this(pCaseDesc, pVariables, pRule);
-		if (pPair != null) {
+		if (pPair == null) return;
+
 			final String[] pairArr = pPair.split(":");
 			this.pairMap.put(pairArr[0], pairArr[1]);
 			this.reversePairMap.put(pairArr[1], pairArr[0]);
-		}
 	}
 
 	/**
 	 * Builder pattern.
-	 * 
+	 *
 	 * @param pPair output pair for binary output rules.
 	 */
 	public CaseFixture<T> pair(final String pPair)
@@ -106,7 +103,7 @@ public class CaseFixture<T> {
 
 	/**
 	 * Builder pattern.
-	 * 
+	 *
 	 * @param pCaseId Case identifier.
 	 */
 	public CaseFixture<T> caseIdentifier(final List<String> pCaseId)
@@ -117,7 +114,7 @@ public class CaseFixture<T> {
 
 	/**
 	 * Builder pattern.
-	 * 
+	 *
 	 * @param pExempt exemption rule.
 	 */
 	public CaseFixture<T> exempt(final String pExempt)
@@ -126,31 +123,30 @@ public class CaseFixture<T> {
 		return this;
 	}
 
-	/**
-	 * Builder pattern.
-	 * 
-	 * @param pCaseId Case identifier.
-	 */
-	public CaseFixture<T> caseIdentifier(final String pCaseId)
-	{
-		this.caseId = Arrays.asList(new String[] { pCaseId });
-		return this;
-	}
+//	/**
+//	 * Builder pattern.
+//	 *
+//	 * @param pCaseId Case identifier.
+//	 */
+//	public CaseFixture<T> caseIdentifier(final String pCaseId)
+//	{
+//		this.caseId = Arrays.asList(new String[] { pCaseId });
+//		return this;
+//	}
 
 	/**
 	 * Builder pattern.
-	 * 
+	 *
 	 * @param pConverters Element type converters.
 	 */
 	public CaseFixture<T> convert(final List<ElementConverter> pConverters)
 	{
-		this.converters = pConverters;
 		return this;
 	}
 
 	/**
 	 * Builder pattern.
-	 * 
+	 *
 	 * @param pRuleConverter rule token converters.
 	 */
 	public CaseFixture<T> ruleConverter(final Map<String, ElementConverter> pRuleConverter)
@@ -215,16 +211,6 @@ public class CaseFixture<T> {
 	public String getExemptRule()
 	{
 		return this.exemptRule;
-	}
-
-	public List<ElementConverter> getConverters()
-	{
-		return this.converters;
-	}
-
-	public void setConverters(final List<ElementConverter> pConverters)
-	{
-		this.converters = pConverters;
 	}
 
 	/**

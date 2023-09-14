@@ -18,9 +18,9 @@ package junitcast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mockito;
@@ -35,7 +35,8 @@ import junitcast.util.RuleUtil;
  *
  * @author Royce Remulla
  */
-public class ParameterGeneratorTest extends AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
+public class ParameterGeneratorTest
+		extends AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
 
 	/** Test artifact. */
 	private static final String TEST_NEG = "NEGATIVE";
@@ -61,14 +62,14 @@ public class ParameterGeneratorTest extends AbstractTransientValueTestCase<Param
 	}
 
 	/** */
-	enum Variable {
+	/* default */ enum Variable {
 
 		/** */
 		Init, Negative, Positive, Match_Expected, Miss_Expected
 	}
 
 	/** */
-	enum Trans {
+	/* default */ enum Trans {
 
 		/** */
 		Output, Fixture, Expected, Pair
@@ -85,22 +86,23 @@ public class ParameterGeneratorTest extends AbstractTransientValueTestCase<Param
 	@Parameters(name = "{0}")
 	public static Collection<Object[]> generateData()
 	{
-		final List<CaseFixture<String>> fixTureList = new ArrayList<CaseFixture<String>>();
-		final List<List<String>> variables = new ArrayList<List<String>>();
+		final List<CaseFixture<String>> fixTureList = new ArrayList<>();
+		final List<List<String>> variables = new ArrayList<>();
 
-		variables.add(new ArrayList<String>(Arrays.asList(new String[] { Variable.Init.name() })));
+		variables.add(new ArrayList<>(Arrays.asList(Variable.Init.name())));
 
-		variables.add(new ArrayList<String>(
-				Arrays.asList(new String[] { Variable.Negative.name(), Variable.Positive.name() })));
+		variables.add(
+				new ArrayList<>(Arrays.asList(Variable.Negative.name(), Variable.Positive.name())));
 
-		variables.add(new ArrayList<String>(
-				Arrays.asList(new String[] { Variable.Match_Expected.name(), Variable.Miss_Expected.name() })));
+		variables.add(new ArrayList<>(
+				Arrays.asList(Variable.Match_Expected.name(), Variable.Miss_Expected.name())));
 
 		final StringBuilder ruleBuilder = new StringBuilder().append(TEST_NEG).append(':')
-				.append(Variable.Negative.name()).append('&').append(Variable.Match_Expected.name()).append('|')
-				.append(Variable.Positive.name()).append('&').append(Variable.Miss_Expected.name());
+				.append(Variable.Negative.name()).append('&').append(Variable.Match_Expected.name())
+				.append('|').append(Variable.Positive.name()).append('&')
+				.append(Variable.Miss_Expected.name());
 
-		fixTureList.add(new CaseFixture<String>("getBinaryAction", variables,
+		fixTureList.add(new CaseFixture<>("getBinaryAction", variables,
 				new Rule(RuleUtil.parseRuleDefinition(ruleBuilder.toString())), TEST_PAIR));
 
 		return new ParameterGenerator<String>().generateData(fixTureList);
@@ -110,9 +112,9 @@ public class ParameterGeneratorTest extends AbstractTransientValueTestCase<Param
 	@Override
 	protected void prepare()
 	{
-		final ScenarioSource<Object> source = new ScenarioSource<Object>(this);
+		final ScenarioSource<Object> source = new ScenarioSource<>(this);
 
-		source.addObserver(Variable.Init, new CaseObserver<Object>() {
+		source.addObserver(Variable.Init, new CaseObserver<>() {
 
 			@Override
 			public void prepareCase(final int index, final Object caseRaw)
@@ -121,9 +123,9 @@ public class ParameterGeneratorTest extends AbstractTransientValueTestCase<Param
 				final CaseFixture<String> mockFixture = Mockito.mock(CaseFixture.class);
 
 				final String[] pairArr = TEST_PAIR.split(":");
-				final Map<String, String> pairMap = new HashMap<String, String>();
+				final Map<String, String> pairMap = new ConcurrentHashMap<>();
 				pairMap.put(pairArr[0], pairArr[1]);
-				final Map<String, String> reversePairMap = new HashMap<String, String>();
+				final Map<String, String> reversePairMap = new ConcurrentHashMap<>();
 				reversePairMap.put(pairArr[1], pairArr[0]);
 
 				Mockito.doReturn(pairMap).when(mockFixture).getPairMap();

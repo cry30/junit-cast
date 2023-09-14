@@ -15,28 +15,19 @@
  */
 package junitcast;
 
-import junitcast.ann.Revision;
-
 /**
- *
- * <pre>
- * @author $Author$
- * @version $Date$
- * </pre>
  *
  * @param <S> scenario parameter type. Normally String.
  */
-@Revision("$Revision: $")
 public interface CaseObserver<S> {
 
-    /**
-     * Case specific scenario processor.
-     *
-     * @param index scenario token index. Useful when you have similarly named
-     *            tokens.
-     * @param caseRaw raw case string defined in properties file.
-     */
-    void prepareCase(int index, S caseRaw);
-
+	/**
+	 * Case specific scenario processor.
+	 *
+	 * @param index   scenario token index. Preferred over name so that it still
+	 *                works when you have a similarly named variable tokens.
+	 * @param caseRaw raw case string defined in properties file.
+	 */
+	void prepareCase(int index, S caseRaw);
 
 }

@@ -13,6 +13,7 @@ import org.junit.Assert;
 import com.github.roycetech.ruleengine.Rule;
 import com.github.roycetech.ruleengine.RuleEvaluator;
 import com.github.roycetech.ruleengine.RuleProcessor;
+import com.google.common.collect.Lists;
 
 /**
  * Implementation for junit4 parameterized test generateData static method.
@@ -95,8 +96,7 @@ public class ParameterGenerator<T> {
 	 */
 	private void addCase(final List<Object[]> paramCollection, final CaseFixture<T> caseFixture)
 	{
-		final ListMerger<T> listCombinator = new ListMerger<>();
-		final List<List<T>> combinations = listCombinator.merge(caseFixture.getVariables());
+		final List<List<T>> combinations = Lists.cartesianProduct(caseFixture.getVariables());
 		for (final List<T> scenario : combinations) {
 			if (isValidCase(scenario, caseFixture)) {
 				final String result = validateRule(scenario, caseFixture);

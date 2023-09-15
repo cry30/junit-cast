@@ -18,16 +18,16 @@ package io.github.roycetech.junitcast;
 /**
  * Provides facility to transfer test case values between test preparation and
  * test execution.
- * 
+ *
  * @param <V> transient value element type.
- * 
+ *
  * @author Royce Remulla
  */
 public interface TransientValue<V> {
 
     /**
      * Get transient value from the given index.
-     * 
+     *
      * @param key dictionary key.
      * @return the testParameter at the given index.
      */
@@ -35,7 +35,7 @@ public interface TransientValue<V> {
 
     /**
      * Set transient value on a given index.
-     * 
+     *
      * @param key dictionary key.
      * @param pValue the testParameter to set
      */

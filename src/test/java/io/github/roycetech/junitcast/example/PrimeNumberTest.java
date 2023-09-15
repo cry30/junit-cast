@@ -23,15 +23,13 @@ import org.junit.runners.Parameterized.Parameters;
 import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.example.PrimeNumber;
 
 /**
  * Test class for PrimeNumber.
  *
  * @author Royce Remulla.
  */
-public class PrimeNumberTest extends
-		AbstractTransientValueTestCase<PrimeNumber, Integer, Integer> {
+public class PrimeNumberTest extends AbstractTransientValueTestCase<PrimeNumber, Integer, Integer> {
 
 	/**
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
@@ -59,7 +57,7 @@ public class PrimeNumberTest extends
 	public static Collection<Object[]> generateData()
 	{
 		return new ParameterGenerator<Integer>()
-			.genVarData("io.github.roycetech.junitcast.example.PrimeNumberTest");
+				.genVarData("io.github.roycetech.junitcast.example.PrimeNumberTest");
 	}
 
 	/** {@inheritDoc} */
@@ -76,8 +74,7 @@ public class PrimeNumberTest extends
 	protected void execute()
 	{
 		try {
-			setResult(String.valueOf(getMockSubject().isPrimeNumber(
-				getTransientValue(0))));
+			setResult(String.valueOf(getMockSubject().isPrimeNumber(getTransientValue(0))));
 		} catch (final IllegalArgumentException iae) {
 			setResult("ERROR");
 		}

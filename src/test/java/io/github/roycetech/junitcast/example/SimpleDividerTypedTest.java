@@ -24,7 +24,6 @@ import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.MockitoHelper;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.example.SimpleDivider;
 
 /**
  * Test class for SimpleDivider. This is typed version. Some codes are expected

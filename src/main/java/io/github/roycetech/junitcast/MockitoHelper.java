@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 /**
  * Helper class for mockito test subclasses. You need to reference Mockito
  * library 1.8+ if you want to subclass this.
- * 
+ *
  * @author Royce Remulla
  */
 public class MockitoHelper {
@@ -34,7 +34,7 @@ public class MockitoHelper {
 	 * @param <T>               Test Object instance type. Does not support generic
 	 *                          types, you can omit the generic argument of test
 	 *                          subject type. Must not be null.
-	 * 
+	 *
 	 * @param testCase          Test case instance.
 	 * @param constructorParams test subject constructor parameters.
 	 */
@@ -77,7 +77,7 @@ public class MockitoHelper {
 
 	/**
 	 * Auto resolve constructor based on List of Object parameter.
-	 * 
+	 *
 	 * @param klazz   class to derive constructor from.
 	 * @param pParams List of Object parameters.
 	 */

@@ -78,7 +78,7 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 	@Override
 	protected void prepare()
 	{
-		final ScenarioSource<String> source = new ScenarioSource<String>(this);
+		final ScenarioSource<String> source = new ScenarioSource<>(this);
 		source.addTransientCase(0, null, Variable.null_array);
 		source.addTransientCase(0, new String[0], Variable.empty);
 		source.addTransientCase(0, "Invalid parameter to the trimArray", Variable.sweep_exception);
@@ -86,21 +86,21 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 		// @formatter:off
 		source.addTransientCase(
 				0,
-				new String[] { 
-						" a", 
-						" b ", 
-						"         c                       ", 
-						"d" 
+				new String[] {
+						" a",
+						" b ",
+						"         c                       ",
+						"d"
 				},
 				Variable.normal
 		);
 
 		source.addTransientCase(
-				0, 
-				new String[] { 
-						" a", 
-						"b ", 
-						" c                       ", 
+				0,
+				new String[] {
+						" a",
+						"b ",
+						" c                       ",
 						null },
 				Variable.null_item);
 		// @formatter:on
@@ -128,10 +128,10 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 				}
 			}
 		// @formatter:off
-		} catch (final IllegalArgumentException 
-				| SecurityException 
-				| IllegalAccessException 
-				| InvocationTargetException 
+		} catch (final IllegalArgumentException
+				| SecurityException
+				| IllegalAccessException
+				| InvocationTargetException
 				| NoSuchMethodException e) {
 			setResult("Error");
 		}

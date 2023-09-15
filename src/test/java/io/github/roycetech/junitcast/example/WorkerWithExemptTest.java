@@ -10,7 +10,6 @@ import io.github.roycetech.junitcast.AbstractTestCase;
 import io.github.roycetech.junitcast.MockitoHelper;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.example.Worker;
 
 /**
  * Example class demonstrating the use of exempt in the configuration file.

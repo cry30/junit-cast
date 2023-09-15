@@ -216,7 +216,7 @@ public class ScenarioSource<S> {
 
 	/**
 	 * Refactored out of #notifyObservers.
-	 * 
+	 *
 	 * @param caseObsList the observers list.
 	 */
 	private void prepareObserver(final S nextCase, final int scenarioIndex,
@@ -232,7 +232,7 @@ public class ScenarioSource<S> {
 
 	/**
 	 * Used for testing only.
-	 * 
+	 *
 	 * @return the testCase transient value at the given key.
 	 */
 	/* default */ Object getTestCaseTransientValue(final String key)

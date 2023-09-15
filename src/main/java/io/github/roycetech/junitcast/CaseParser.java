@@ -22,11 +22,11 @@ public interface CaseParser {
 
 	/**
 	 * Parse a value from case enum instance.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param kaso enum value.
 	 * @param <E>  enum type.
-	 * 
+	 *
 	 * @return calculated case value.
 	 */
 	<E extends Enum<E>> Object parse(E kaso);

@@ -297,7 +297,7 @@ public class ResourceFixture {
 	{
 		IntStream.range(0, getCaseList().size())
 				.filter(i -> getResourceBundle().containsKey(ResourceKey.pair.name() + i))
-				.forEach(i -> listPairMap.put(i,
+				.forEach(i -> this.listPairMap.put(i,
 						getResourceBundle().getString(ResourceKey.pair.name() + i).trim()));
 	}
 
@@ -359,7 +359,7 @@ public class ResourceFixture {
 	 */
 	public int getDebugStart()
 	{
-		return debugStart;
+		return this.debugStart;
 	}
 
 	/**
@@ -379,7 +379,7 @@ public class ResourceFixture {
 	 */
 	public List<Map<String, ElementConverter>> getRuleTokenConverter()
 	{
-		return ruleTokenConverter;
+		return this.ruleTokenConverter;
 	}
 }
 

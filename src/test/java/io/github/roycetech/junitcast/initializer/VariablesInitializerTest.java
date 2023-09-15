@@ -13,7 +13,6 @@ import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
 import io.github.roycetech.junitcast.ResourceFixture;
-import io.github.roycetech.junitcast.initializer.VariablesInitializer;
 
 /**
  * VariablesInitializer Test class.
@@ -67,7 +66,7 @@ public class VariablesInitializerTest
 
 			switch (scenario) {
 			case "With Common Var":
-				Mockito.doReturn("dummy common").when(_resourceFixture)
+				Mockito.doReturn("dummy common").when(this._resourceFixture)
 						.getResourceString(ResourceFixture.ResourceKey.commonvar.name());
 
 				Mockito.doAnswer(new Answer<>() {
@@ -77,7 +76,7 @@ public class VariablesInitializerTest
 						setResult("Fetches commonvar");
 						return null;
 					}
-				}).when(_resourceFixture).fetchVariables(-1,
+				}).when(this._resourceFixture).fetchVariables(-1,
 						ResourceFixture.ResourceKey.commonvar.name(), ",", null);
 				break;
 			}

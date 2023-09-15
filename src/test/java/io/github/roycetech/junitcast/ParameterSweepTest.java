@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import io.github.roycetech.junitcast.Parameter;
-
 public class ParameterSweepTest {
 
 	@Test

@@ -22,7 +22,7 @@ public class ThreeLogicChecker {
 
     /**
      * Applies logical first or second and third. This will evaluate as (first || (second && third)).
-     * 
+     *
      * @param first rtfc.
      * @param second rtfc.
      * @param third rtfc.

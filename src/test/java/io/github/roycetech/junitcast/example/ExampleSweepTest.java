@@ -6,9 +6,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import io.github.roycetech.junitcast.example.MultiType;
-import io.github.roycetech.junitcast.example.Worker;
-
 /**
  * These tests are for coverage sweep only to confirm that the uncovered parts
  * of codes are intended to be not covered.

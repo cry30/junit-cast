@@ -13,7 +13,6 @@ import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
 import io.github.roycetech.junitcast.ResourceFixture;
-import io.github.roycetech.junitcast.initializer.ExemptInitializer;
 
 /**
  * VariablesInitializer Test class.
@@ -60,7 +59,7 @@ public class ExemptInitializerTest
 	{
 		final ResourceBundle _resourceBundle = Mockito.mock(ResourceBundle.class);
 		Mockito.doReturn(_resourceBundle).when(this._resourceFixture).getResourceBundle();
-		Mockito.doReturn(new HashSet<String>(Set.of("Case 1"))).when(this._resourceFixture)
+		Mockito.doReturn(new HashSet<>(Set.of("Case 1"))).when(this._resourceFixture)
 				.getCaseList();
 
 		for (final String scenario : getParameter().getScenario()) {

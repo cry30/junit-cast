@@ -17,14 +17,14 @@ package io.github.roycetech.junitcast.example;
 
 /**
  * Checks if a number is prime number or not.
- * 
+ *
  * @author r39
  */
 public class PrimeNumber {
 
 	/**
 	 * Returns true if input is positive and is a prime number.
-	 * 
+	 *
 	 * @param input integer input.
 	 */
 	public boolean isPrimeNumber(final int input)
@@ -42,7 +42,7 @@ public class PrimeNumber {
 	/**
 	 * Refactored out of {@link #isPrimeNumber(int)}. Handles the positive scenarios
 	 * only.
-	 * 
+	 *
 	 * @param input integer input.
 	 */
 	private boolean computePrimeNumber(final int input)

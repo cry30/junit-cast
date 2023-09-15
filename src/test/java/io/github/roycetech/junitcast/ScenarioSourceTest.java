@@ -5,12 +5,6 @@ import java.util.List;
 
 import org.junit.runners.Parameterized.Parameters;
 
-import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
-import io.github.roycetech.junitcast.CaseObserver;
-import io.github.roycetech.junitcast.CaseParser;
-import io.github.roycetech.junitcast.Parameter;
-import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.ScenarioSource;
 import io.github.roycetech.junitcast.example.PositivityTest;
 import io.github.roycetech.junitcast.util.StringUtilTest;
 
@@ -35,7 +29,7 @@ public class ScenarioSourceTest
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new ScenarioSource<String>(this));
+		setMockSubject(new ScenarioSource<>(this));
 	}
 
 	/**

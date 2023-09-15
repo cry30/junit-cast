@@ -25,7 +25,6 @@ import io.github.roycetech.junitcast.AbstractTestCase;
 import io.github.roycetech.junitcast.MockitoHelper;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.example.Worker;
 
 //Subclass io.github.roycetech.junitcast.AbstractTestCase.
 //<Worker, String> refers to the subject class, data type of scenario.

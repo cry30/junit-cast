@@ -44,7 +44,7 @@ public class MultiType {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param position Position being applied for.
 	 * @param grade    from 1 to 10.
 	 */

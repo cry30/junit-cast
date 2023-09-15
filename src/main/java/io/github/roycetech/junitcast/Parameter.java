@@ -70,7 +70,7 @@ public class Parameter<E> {
 
 	/**
 	 * Returns the expected result for the referenced test scenario.
-	 * 
+	 *
 	 * @return the expected result for the referenced test scenario.
 	 */
 	public String getExpected()

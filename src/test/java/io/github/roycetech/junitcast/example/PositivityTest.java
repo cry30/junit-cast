@@ -11,7 +11,6 @@ import org.junit.runners.Parameterized.Parameters;
 import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.example.Positivity;
 
 /**
  * Test class for Positivity.

@@ -23,9 +23,9 @@ public final class RuleUtil {
 	/**
 	 * Parse a rule definition mapping of outcome to clause from a rule definition
 	 * string.
-	 * 
+	 *
 	 * @param ruleDefinition the mapping of outcome to clause in a text form.
-	 * 
+	 *
 	 * @return a map instance with the outcome to clause mapping.
 	 */
 	public static Map<String, Object> parseRuleDefinition(final String ruleDefinition)

@@ -12,7 +12,6 @@ import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
 import io.github.roycetech.junitcast.ResourceFixture;
-import io.github.roycetech.junitcast.initializer.CasesInitializer;
 
 /**
  * CasesInitializer Test class.

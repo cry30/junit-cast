@@ -10,7 +10,6 @@ import io.github.roycetech.junitcast.JUnitCastException;
 import io.github.roycetech.junitcast.MockitoHelper;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-import io.github.roycetech.junitcast.util.RuleUtil;
 
 /**
  * RuleUtil Test class.

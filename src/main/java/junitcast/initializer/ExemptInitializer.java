@@ -32,27 +32,49 @@ public class ExemptInitializer implements ResourceParameterInitializer {
 		}
 
 		for (int i = 0; i < getResourceFixture().getCaseList().size(); i++) {
-			final StringBuilder exemptRule = new StringBuilder();
-			final int actualIdx = i + getResourceFixture().getDebugStart();
-
-			final String key = String.valueOf(ResourceKey.exempt) + actualIdx;
-			String caseExempt = null; // NOPMD: null default, conditionally redefine.
-			if (getResourceFixture().getResourceBundle().containsKey(key)) {
-				caseExempt = getResourceFixture().getResourceString(key);
-			}
-
-			if (StringUtil.hasValue(commonExempt) && StringUtil.hasValue(caseExempt)) {
-				exemptRule.append(String.format("(%s)|%s", commonExempt, caseExempt));
-			} else if (StringUtil.hasValue(caseExempt)) {
-				exemptRule.append(caseExempt);
-			} else if (StringUtil.hasValue(commonExempt)) {
-				exemptRule.append(commonExempt);
-			}
-
-			if (StringUtil.hasValue(exemptRule.toString())) {
-				getResourceFixture().getCaseExemptMap().put(i, exemptRule.toString());
-			}
+			initializeCommonExemptions(commonExempt, i);
 		}
+	}
+
+	/**
+	 * Initializes common exemption for a specific case index and updates the
+	 * exemption map.
+	 *
+	 * @param commonExempt The common exemption string.
+	 * @param caseIndex    The index of the case.
+	 */
+	private void initializeCommonExemptions(final String commonExempt, final int caseIndex)
+	{
+		final StringBuilder exemptRule = new StringBuilder();
+		final String caseExempt = computeCaseExempt(caseIndex);
+
+		if (StringUtil.hasValue(commonExempt) && StringUtil.hasValue(caseExempt)) {
+			exemptRule.append(String.format("(%s)|%s", commonExempt, caseExempt));
+		} else if (StringUtil.hasValue(caseExempt)) {
+			exemptRule.append(caseExempt);
+		} else if (StringUtil.hasValue(commonExempt)) {
+			exemptRule.append(commonExempt);
+		}
+
+		if (StringUtil.hasValue(exemptRule.toString())) {
+			getResourceFixture().getCaseExemptMap().put(caseIndex, exemptRule.toString());
+		}
+	}
+
+	/**
+	 * Computes and retrieves an exempt case based on the current index.
+	 *
+	 * @return The exempt case if found in the resource bundle; otherwise, null.
+	 */
+	private String computeCaseExempt(final int caseIndex)
+	{
+		final int actualIdx = caseIndex + getResourceFixture().getDebugStart();
+		final String key = String.valueOf(ResourceKey.exempt) + actualIdx;
+		if (getResourceFixture().getResourceBundle().containsKey(key)) {
+			return getResourceFixture().getResourceString(key);
+		}
+
+		return null;
 	}
 
 	/**

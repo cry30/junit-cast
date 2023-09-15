@@ -219,14 +219,7 @@ public class ResourceFixture {
 			final String commonVarRaw, final String separator, final String converters)
 	{
 		final String[] rawGroup = StringUtil.trimArray(commonVarRaw.split("\\|"));
-
-		String[] converterArr;
-		if (StringUtil.hasValue(converters)) {
-			converterArr = converters.split("\\|");
-		} else {
-			converterArr = new String[rawGroup.length];
-			Arrays.fill(converterArr, StringConverter.class.getName());
-		}
+		final String[] converterArr = buildConverterArray(converters, rawGroup);
 
 		final List<ElementConverter> elConvList = new ArrayList<>();
 		this.caseConverterList.add(elConvList);
@@ -238,18 +231,51 @@ public class ResourceFixture {
 
 			if (!"".equals(nextGroup)) {
 				final String[] nextGroupArr = StringUtil.trimArray(nextGroup.split(separator));
-				if (caseIndex > -1) { // TODO: Unsupported typed common variables.
-					for (final String string : nextGroupArr) {
-						final Map<String, ElementConverter> ruleTokenMap = this.ruleTokenConverter
-								.get(caseIndex);
-						ruleTokenMap.put(string, elConvert);
-					}
-				}
+
+				remapConverterByToken(caseIndex, elConvert, nextGroupArr);
 
 				caseComb.add(new ArrayList<>(convert(nextGroupArr, elConvert)));
 			}
 		}
 		return caseComb;
+	}
+
+	/**
+	 * Refactored out of extractCombinations.
+	 * 
+	 * @param caseIndex
+	 * @param elConvert
+	 * @param groupArray
+	 */
+	private void remapConverterByToken(final int caseIndex, final ElementConverter elConvert,
+			final String[] groupArray)
+	{
+		if (caseIndex > -1) { // TODO: Unsupported typed common variables.
+			for (final String nextGroup : groupArray) {
+				final Map<String, ElementConverter> ruleTokenMap = this.ruleTokenConverter
+						.get(caseIndex);
+				ruleTokenMap.put(nextGroup, elConvert);
+			}
+		}
+	}
+
+	/**
+	 * Refactored out of {@link #extractCombinations(int, String, String, String)}
+	 * 
+	 * @param converters
+	 * @param rawGroup
+	 * @return
+	 */
+	private String[] buildConverterArray(final String converters, final String[] rawGroup)
+	{
+		String[] converterArr;
+		if (StringUtil.hasValue(converters)) {
+			converterArr = converters.split("\\|");
+		} else {
+			converterArr = new String[rawGroup.length];
+			Arrays.fill(converterArr, StringConverter.class.getName());
+		}
+		return converterArr;
 	}
 
 	/**

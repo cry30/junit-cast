@@ -20,9 +20,8 @@ package junitcast;
  * @param <S> scenario parameter type. Normally String.
  */
 public interface CaseObserver<S> {
-
 	/**
-	 * Case specific scenario processor.
+	 * Prepares the case for observation. Case-specific scenario processor.
 	 *
 	 * @param index   scenario token index. Preferred over name so that it still
 	 *                works when you have a similarly named variable tokens.

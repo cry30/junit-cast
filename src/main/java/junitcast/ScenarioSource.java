@@ -137,6 +137,16 @@ public class ScenarioSource<S> {
 		}
 	}
 
+	/**
+	 * Creates a new CaseObserver for the given case, key, and value.
+	 *
+	 * @param <T>      The type of the key.
+	 * @param <C>      The enum type for the cases.
+	 * @param nextCase The next case (enum value) to observe.
+	 * @param key      The key associated with the observation.
+	 * @param value    The value associated with the observation.
+	 * @return A new CaseObserver instance.
+	 */
 	/* default */ <T, C extends Enum<C>> CaseObserver<S> createNewCase(final C nextCase,
 			final T key, final Object value)
 	{
@@ -168,12 +178,6 @@ public class ScenarioSource<S> {
 	{
 		if (cases == null || cases.length == 0) {
 			throw new IllegalArgumentException("Must have at least one valid case.");
-		}
-
-		if (!(this.testCase instanceof AbstractTransientValueTestCase)) {
-			throw new UnsupportedOperationException("Test case must be a sub class of "
-					+ AbstractTransientValueTestCase.class.getSimpleName()
-					+ " for this method to work.");
 		}
 	}
 
@@ -214,12 +218,23 @@ public class ScenarioSource<S> {
 		this.enumObsMap.clear();
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString()
+	/**
+	 * Used for testing only.
+	 * 
+	 * @return the testCase transient value at the given key.
+	 */
+	Object getTestCaseTransientValue(final String key)
 	{
-		return getClass().getSimpleName() + "[" + this.testCase.getClass().getSimpleName()
-				+ "] Observer size: " + this.enumObsMap.size();
+		return ((AbstractTransientValueTestCase<?, S, ?>) this.testCase).getTransientValue(key);
 	}
+
+//	Used for debugging only.
+//	/** {@inheritDoc} */
+//	@Override
+//	public String toString()
+//	{
+//		return getClass().getSimpleName() + "[" + this.testCase.getClass().getSimpleName()
+//				+ "] Observer size: " + this.enumObsMap.size();
+//	}
 
 }

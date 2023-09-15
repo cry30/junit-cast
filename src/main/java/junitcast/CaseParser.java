@@ -15,24 +15,20 @@
  */
 package junitcast;
 
-
 /**
  * Used to derive value based on case enum name.
- * 
- * @author royce.com
  */
 public interface CaseParser {
 
-
-    /**
-     * Parse a value from case enum instance.
-     * 
-     * 
-     * @param kaso enum value.
-     * @param <E> enum type.
-     * 
-     * @return calculated case value.
-     */
-    <E extends Enum<E>> Object parse(E kaso);
+	/**
+	 * Parse a value from case enum instance.
+	 * 
+	 * 
+	 * @param kaso enum value.
+	 * @param <E>  enum type.
+	 * 
+	 * @return calculated case value.
+	 */
+	<E extends Enum<E>> Object parse(E kaso);
 
 }

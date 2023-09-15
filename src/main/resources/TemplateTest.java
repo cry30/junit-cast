@@ -13,12 +13,12 @@ import org.junit.runners.Parameterized.Parameters;
  * Template Test class.
  */
 public class TemplateTest extends
-		AbstractTransientValueTestCase<YourClass, Integer, Integer> {
+		AbstractTransientValueTestCase<Template, String, String> {
 
 	/**
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
 	 */
-	public TemplateTest(final Parameter<Integer> pParameter) {
+	public TemplateTest(final Parameter<String> pParameter) {
 		super(pParameter);
 	}
 
@@ -26,7 +26,7 @@ public class TemplateTest extends
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new YourClass());
+		setMockSubject(new Template());
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class TemplateTest extends
 	@Override
 	protected void prepare()
 	{
-		for (final Integer scenarioToken : getParameter().getScenario()) {
+		for (final String scenarioToken : getParameter().getScenario()) {
 			setTransientValue(0, scenarioToken);
 		}
 	}

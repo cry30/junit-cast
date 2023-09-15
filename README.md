@@ -1,4 +1,9 @@
+<a href="https://codeclimate.com/github/roycetech/junit-cast/maintainability"><img src="https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/maintainability" /></a>
+
+<a href="https://codeclimate.com/github/roycetech/junit-cast/test_coverage"><img src="https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/test_coverage" /></a>
+
 # JUnit Cast
+
 
 A library that leverages the JUnit parameterized tests to test all scenarios by provided. 
 

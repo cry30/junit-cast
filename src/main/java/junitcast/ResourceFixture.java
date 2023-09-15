@@ -18,7 +18,9 @@ import com.github.roycetech.ruleengine.converter.ElementConverter;
 import com.github.roycetech.ruleengine.converter.StringConverter;
 import com.github.roycetech.ruleengine.utils.StringUtil;
 
+import junitcast.initializer.CasesInitializer;
 import junitcast.initializer.ExemptInitializer;
+import junitcast.initializer.IdentifierInitializer;
 import junitcast.initializer.VariablesInitializer;
 import junitcast.util.RuleUtil;
 
@@ -103,10 +105,10 @@ public class ResourceFixture {
 	 */
 	/* default */ void generateCases()
 	{
-		initCases();
+		new CasesInitializer(this).initialize();
 		new VariablesInitializer(this).initialize();
 		initRules();
-		initIdentifier();
+		new IdentifierInitializer(this).initialize();
 		new ExemptInitializer(this).initialize();
 		initPair();
 	}
@@ -135,36 +137,6 @@ public class ResourceFixture {
 			// @formatter:on
 		}
 		return retval;
-	}
-
-	/**
-	 * Initialize cases from casedesc key in property file.
-	 *
-	 * @param resBundle resource bundle instance.
-	 */
-	/* default */ final void initCases()
-	{
-		if (getResourceBundle().containsKey(ResourceKey.debug_index.name())) {
-			final String debugStartStr = getResourceString(ResourceKey.debug_index.name()).trim();
-			try {
-				this.debugStart = Integer.valueOf(debugStartStr);
-			} catch (final NumberFormatException e) {
-				this.debugStart = 0;
-			}
-		} else {
-			this.debugStart = 0;
-		}
-
-		int caseIndex = this.debugStart;
-		while (caseIndex < 10) {
-			final String key = ResourceKey.casedesc.name() + caseIndex++;
-			if (getResourceBundle().containsKey(key)) {
-				final String kaso = getResourceString(key);
-				getCaseList().add(kaso.trim());
-			} else {
-				break;
-			}
-		}
 	}
 
 	/**
@@ -242,7 +214,7 @@ public class ResourceFixture {
 
 	/**
 	 * Refactored out of extractCombinations.
-	 * 
+	 *
 	 * @param caseIndex
 	 * @param elConvert
 	 * @param groupArray
@@ -261,7 +233,7 @@ public class ResourceFixture {
 
 	/**
 	 * Refactored out of {@link #extractCombinations(int, String, String, String)}
-	 * 
+	 *
 	 * @param converters
 	 * @param rawGroup
 	 * @return
@@ -316,23 +288,6 @@ public class ResourceFixture {
 	{
 		return Arrays.asList(groupArray).stream().map(converter::convert)
 				.collect(Collectors.toList());
-	}
-
-	/** Initializes the case ID list. */
-	/* default */ void initIdentifier()
-	{
-		for (int i = 0; i < getCaseList().size(); i++) {
-			final int actualIdx = i + this.debugStart;
-			final String key = ResourceKey.caseId.name() + actualIdx;
-			if (this.resourceBundle.containsKey(key)
-					&& !"".equals(getResourceBundle().getString(key).trim())) {
-				final String raw = getResourceBundle().getString(key);
-				getAttrList().add(Arrays.asList(StringUtil.trimArray(raw.split(","))));
-			} else {
-				final String caseId = getCaseList().toArray(new String[getCaseList().size()])[i];
-				getAttrList().add(Arrays.asList(new String[] { caseId }));
-			}
-		}
 	}
 
 	/**
@@ -405,6 +360,16 @@ public class ResourceFixture {
 	public int getDebugStart()
 	{
 		return debugStart;
+	}
+
+	/**
+	 * Sets the value for the debugStart property.
+	 *
+	 * @param debugStart the debugStart to set
+	 */
+	public void setDebugStart(final int debugStart)
+	{
+		this.debugStart = debugStart;
 	}
 
 	/**

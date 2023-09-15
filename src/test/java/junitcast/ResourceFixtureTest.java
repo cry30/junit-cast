@@ -57,10 +57,6 @@ public class ResourceFixtureTest
 
 		for (final String scenarioToken : getParameter().getScenario()) {
 			switch (getParameter().getCaseDesc()) {
-			case "initCases":
-				prepareInitCases(scenarioToken);
-				break;
-
 			case "fetchVariables":
 				prepareFetchVariables(scenarioToken);
 				break;
@@ -69,27 +65,6 @@ public class ResourceFixtureTest
 				prepareGetConverter(scenarioToken);
 				break;
 			}
-		}
-	}
-
-	private void prepareInitCases(final String scenario)
-	{
-		Mockito.doReturn(!"Without Debug Index".equals(scenario)).when(this._resourceBundle)
-				.containsKey(ResourceFixture.ResourceKey.debug_index.name());
-
-		switch (scenario) {
-		case "Without Debug Index":
-			break;
-
-		case "With Debug Index":
-			Mockito.doReturn("1").when(getMockSubject())
-					.getResourceString(ArgumentMatchers.anyString());
-			break;
-
-		case "Invalid Debug Index":
-			Mockito.doReturn("xxx").when(getMockSubject())
-					.getResourceString(ArgumentMatchers.anyString());
-			break;
 		}
 	}
 
@@ -123,10 +98,6 @@ public class ResourceFixtureTest
 	protected void execute()
 	{
 		switch (getParameter().getCaseDesc()) {
-		case "initCases":
-			testInitCases();
-			break;
-
 		case "fetchVariables":
 			testFetchVariables();
 			break;
@@ -135,16 +106,6 @@ public class ResourceFixtureTest
 			testGetConverter();
 			break;
 
-		}
-	}
-
-	private void testInitCases()
-	{
-		getMockSubject().initCases();
-		if (getMockSubject().getDebugStart() == 0) {
-			setResult("DEBUG START 0");
-		} else {
-			setResult("DEBUG START NON-ZERO");
 		}
 	}
 

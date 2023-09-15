@@ -24,7 +24,7 @@ public class IdentifierInitializer implements ResourceParameterInitializer {
 
 	/** Initializes the case ID list. */
 	@Override
-	public void initialize() final BREAK DEMO!
+	public void initialize()
 	{
 		for (int i = 0; i < getResourceFixture().getCaseList().size(); i++) {
 			final int actualIdx = i + getResourceFixture().getDebugStart();

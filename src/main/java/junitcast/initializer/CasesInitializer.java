@@ -7,8 +7,8 @@ import junitcast.ResourceFixture;
 import junitcast.ResourceFixture.ResourceKey;
 
 /**
- * This class initializes the var parameter from the resource fixture. This was
- * refactored out of ResourceFixture.
+ * This class initializes the casesdesc parameter from the resource fixture.
+ * This was refactored out of ResourceFixture.
  */
 public class CasesInitializer implements ResourceParameterInitializer {
 
@@ -24,6 +24,15 @@ public class CasesInitializer implements ResourceParameterInitializer {
 	@Override
 	public void initialize()
 	{
+		initialzeDebugIndex();
+		initializeCases();
+	}
+
+	/**
+	 * Initializes the debug index property of the resource fixture.
+	 */
+	private void initialzeDebugIndex()
+	{
 		if (getResourceFixture().getResourceBundle().containsKey(ResourceKey.debug_index.name())) {
 			final String debugStartStr = getResourceFixture()
 					.getResourceString(ResourceKey.debug_index.name()).trim();
@@ -35,8 +44,18 @@ public class CasesInitializer implements ResourceParameterInitializer {
 		} else {
 			getResourceFixture().setDebugStart(0);
 		}
+	}
 
+	/**
+	 * Initializes the cases list of the resource fixture.
+	 */
+	private void initializeCases()
+	{
 		int caseIndex = getResourceFixture().getDebugStart();
+		/*
+		 * 10 is a safe value, used during test where the stubbing can make the loop go
+		 * on forever so this limit serves as a safety off switch.
+		 */
 		while (caseIndex < 10) {
 			final String key = ResourceKey.casedesc.name() + caseIndex++;
 			if (getResourceFixture().getResourceBundle().containsKey(key)) {

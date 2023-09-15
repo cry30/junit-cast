@@ -1,5 +1,5 @@
-<a href="https://codeclimate.com/github/roycetech/junit-cast/maintainability"><img src="https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/maintainability" /></a> <a href="https://codeclimate.com/github/roycetech/junit-cast/test_coverage"><img src="https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/test_coverage" /></a> 
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/maintainability)](https://codeclimate.com/github/roycetech/junit-cast/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/test_coverage)](https://codeclimate.com/github/roycetech/junit-cast/test_coverage)
 [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://circleci.com/gh/roycetech/junit-cast)
 
 # JUnit Cast

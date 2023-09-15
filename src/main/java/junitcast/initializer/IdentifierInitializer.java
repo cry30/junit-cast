@@ -10,8 +10,6 @@ import com.github.roycetech.ruleengine.utils.StringUtil;
 import junitcast.ResourceFixture;
 import junitcast.ResourceFixture.ResourceKey;
 
-BREAK BADGE TEST.
-
 /**
  * This class initializes the caseId parameter from the resource fixture. This
  * was refactored out of ResourceFixture.

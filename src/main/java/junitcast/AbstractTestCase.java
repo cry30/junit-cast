@@ -65,20 +65,19 @@ public abstract class AbstractTestCase<T, E> {
 	@SuppressWarnings("unchecked")
 	protected AbstractTestCase(final Parameter<E> pParameter) {
 		this.parameter = pParameter;
-		if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
-			final ParameterizedType paramedType = (ParameterizedType) getClass()
-					.getGenericSuperclass();
-			Class<T> subjecType;
-			final Type type = paramedType.getActualTypeArguments()[0];
-			if (type instanceof ParameterizedType) {
-				subjecType = (Class<T>) ((ParameterizedType) type).getRawType();
-			} else {
-				subjecType = (Class<T>) paramedType.getActualTypeArguments()[0];
-			}
-			this.setSubjectType(subjecType);
+//		if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
+		final ParameterizedType paramedType = (ParameterizedType) getClass().getGenericSuperclass();
+		Class<T> subjecType;
+		final Type type = paramedType.getActualTypeArguments()[0];
+		if (type instanceof ParameterizedType) {
+			subjecType = (Class<T>) ((ParameterizedType) type).getRawType();
+		} else {
+			subjecType = (Class<T>) paramedType.getActualTypeArguments()[0];
+		}
+		this.setSubjectType(subjecType);
 //		} else {
 //			throw new UnsupportedOperationException("Must use parameterized sub type.");
-		}
+//		}
 	}
 
 	/** JUnit 3 setUp(). */

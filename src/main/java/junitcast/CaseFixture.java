@@ -16,37 +16,37 @@
 package junitcast;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.github.roycetech.ruleengine.Rule;
 import com.github.roycetech.ruleengine.converter.ElementConverter;
 
 /**
- * @param <T> scenario tokens type.
+ * Represents a fixture for test cases.
  *
- * @author Royce Remulla
+ * @param <T> The type of scenario tokens.
  */
 public class CaseFixture<T> {
 
 	/** Case description. */
 	private final transient String caseDesc;
 
-	/** */
+	/** List of variables. */
 	private final transient List<List<T>> variables;
 
-	/** Rule token converter. */
+	/** Map of rule token converters. */
 	private transient Map<String, ElementConverter> ruleConv;
 
-	/** */
+	/** The rule associated with this fixture. */
 	private final transient Rule rule;
 
 	/** Action pair map for binary result fixture. */
-	private final transient Map<String, String> pairMap = new HashMap<String, String>();
+	private final transient Map<String, String> pairMap = new ConcurrentHashMap<>();
 
 	/** Action pair reverse map for binary result fixture. */
-	private final transient Map<String, String> reversePairMap = new HashMap<String, String>();
+	private final transient Map<String, String> reversePairMap = new ConcurrentHashMap<>();
 
 	/** Case identifier. */
 	private transient List<String> caseId;
@@ -55,9 +55,12 @@ public class CaseFixture<T> {
 	private transient String exemptRule;
 
 	/**
-	 * @param pCaseDesc  case description.
-	 * @param pVariables case variables.
-	 * @param pRule      source output to rule mapping. (e.g. OUTPUT:true|false).
+	 * Creates a CaseFixture.
+	 *
+	 * @param pCaseDesc  The case description.
+	 * @param pVariables The case variables.
+	 * @param pRule      The source output to rule mapping (e.g.,
+	 *                   OUTPUT:true|false).
 	 */
 	public CaseFixture(final String pCaseDesc, final List<List<T>> pVariables, final Rule pRule) {
 		this.caseDesc = pCaseDesc;
@@ -75,11 +78,12 @@ public class CaseFixture<T> {
 	public CaseFixture(final String pCaseDesc, final List<List<T>> pVariables, final Rule pRule,
 			final String pPair) {
 		this(pCaseDesc, pVariables, pRule);
-		if (pPair == null) return;
+		if (pPair == null)
+			return;
 
-			final String[] pairArr = pPair.split(":");
-			this.pairMap.put(pairArr[0], pairArr[1]);
-			this.reversePairMap.put(pairArr[1], pairArr[0]);
+		final String[] pairArr = pPair.split(":");
+		this.pairMap.put(pairArr[0], pairArr[1]);
+		this.reversePairMap.put(pairArr[1], pairArr[0]);
 	}
 
 	/**
@@ -156,7 +160,9 @@ public class CaseFixture<T> {
 	}
 
 	/**
-	 * @return the caseDesc
+	 * Returns the case description.
+	 *
+	 * @return The case description.
 	 */
 	public String getCaseDesc()
 	{
@@ -164,13 +170,21 @@ public class CaseFixture<T> {
 	}
 
 	/**
-	 * @return the rule
+	 * Returns the rule associated with this fixture.
+	 *
+	 * @return The rule.
 	 */
 	public Rule getRule()
 	{
 		return this.rule;
 	}
 
+	/**
+	 * Returns the outcome of the rule for a given scenario.
+	 *
+	 * @param scenario The scenario.
+	 * @return The rule outcome.
+	 */
 	public String getRuleOutcome(final List<String> scenario)
 	{
 		return this.rule.getRuleOutcome(scenario);

@@ -18,7 +18,6 @@ package junitcast;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.mockito.Mockito;
@@ -83,41 +82,12 @@ public class MockitoHelper {
 	 */
 	Constructor<?> findConstructor(final Class<?> klazz, final List<Object> pParams)
 	{
-		@SuppressWarnings("rawtypes")
-		final List<Constructor> matched = new ArrayList<Constructor>();
 		for (final Constructor<?> nextConst : klazz.getDeclaredConstructors()) {
 			if (nextConst.getParameterTypes().length == pParams.size()) {
-				matched.add(nextConst);
-				final List<Class<?>> parmTypes = getParamTypes(pParams);
-				if (Arrays.asList(nextConst.getParameterTypes()).containsAll(parmTypes)
-						&& !matched.contains(nextConst)) {
-					matched.add(nextConst);
-				}
+				return nextConst;
 			}
 		}
-		if (matched.size() == 1) {
-			return matched.get(0);
-		}
 
-		throw new JUnitCastException("Constructor could not be resolved.");
-	}
-
-	/**
-	 * List of object to list of class.
-	 * 
-	 * @param objects objects to convert.
-	 */
-	List<Class<?>> getParamTypes(final List<Object> objects)
-	{
-		final List<Class<?>> retval = new ArrayList<Class<?>>();
-		for (final Object object : objects) {
-			if (object == null) {
-				retval.add(null);
-			} else {
-				retval.add(object.getClass());
-			}
-
-		}
-		return retval;
+		return null;
 	}
 }

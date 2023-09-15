@@ -68,34 +68,6 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 		return new ParameterGenerator<String>().genVarData("junitcast.util.StringUtilTest");
 	}
 
-	@Override
-	protected void execute()
-	{
-		Object retval = null; // NOPMD: null default, conditionally redefine.
-		try {
-			final Object result = getRealSubject().getClass()
-					.getDeclaredMethod(getParameter().getIdentifier().get(0),
-							new Class[] { String[].class })
-					.invoke(getMockSubject(), new Object[] { getTransientValue(0) });
-			if (result == null) {
-				retval = "null";
-			} else {
-				final Object[] arr = (Object[]) result;
-				if (arr.length == 0) {
-					retval = "empty";
-				} else {
-					retval = Arrays.asList((String[]) result).toString().replaceAll(", ", "-");
-				}
-			}
-		// @formatter:off
-		} catch (final IllegalArgumentException | SecurityException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			Assert.fail(e.getMessage());
-		}
-		// @formatter:on
-
-		setResult(retval);
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	protected void prepare()
@@ -105,27 +77,45 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 		source.addTransientCase(0, new String[0], Variable.empty);
 
 		// @formatter:on
-		source.addTransientCase(
-			0,
-			new String[] {
-				" a",
-				" b ",
-				"         c                       ",
-				"d" },
-			Variable.normal
-		);
-
 		source.addTransientCase(0,
-			new String[] {
-				" a",
-				"b ",
-				" c                       ", null
-			},
-			Variable.null_item
-		);
+				new String[] { " a", " b ", "         c                       ", "d" },
+				Variable.normal);
+
+		source.addTransientCase(0, new String[] { " a", "b ", " c                       ", null },
+				Variable.null_item);
 		// @formatter:off
 
 		source.notifyObservers();
 	}
 
+ 
+	@Override
+	protected void execute()
+	{
+		try {
+			final Object result = getRealSubject().getClass()
+					.getDeclaredMethod(getParameter().getIdentifier().get(0),
+							new Class[] { String[].class })
+					.invoke(getMockSubject(), new Object[] { getTransientValue(0) });
+			if (result == null) {
+				setResult(null);
+				
+			} else {
+				final Object[] arr = (Object[]) result;
+				if (arr.length == 0) {
+					setResult("empty");
+				} else {
+					setResult(Arrays.asList((String[]) result).toString().replaceAll(", ", "-"));
+				}
+			}
+		// @formatter:off
+		} catch (final IllegalArgumentException 
+				| SecurityException 
+				| IllegalAccessException 
+				| InvocationTargetException 
+				| NoSuchMethodException e) {
+			Assert.fail(e.getMessage());
+		}
+		// @formatter:on
+	}
 }

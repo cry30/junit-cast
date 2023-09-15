@@ -14,7 +14,8 @@ import junitcast.JUnitCastException;
  * @author Royce Remulla
  *
  */
-public class RuleUtil {
+public final class RuleUtil {
+
 	/** Utility class. */
 	private RuleUtil() {
 	}
@@ -38,33 +39,39 @@ public class RuleUtil {
 		final Map<String, Object> ruleMap = new LinkedHashMap<>();
 		final String[] ruleArr = ruleDefinition.split("~");
 
-		final List<String> duplicate = new ArrayList<>();
+		final List<String> duplicates = new ArrayList<>();
 		for (final String nextRule : ruleArr) {
-			if (!nextRule.contains(":")) {
-				throw new JUnitCastException(
-						"A colon is required to separate the outcome followed by the rule clause.");
-			}
-
-			final String[] actionClauseArr = nextRule.split(":");
-			if (actionClauseArr.length > 2) {
-				throw new JUnitCastException("Too many colons");
-			}
-
-			if (actionClauseArr.length == 1 || "".equals(actionClauseArr[0])) {
-				throw new JUnitCastException("Invalid colon placement");
-			}
-
-			final String action = actionClauseArr[0].trim();
-			if (duplicate.contains(action)) {
-				throw new JUnitCastException("Duplicate outcomes detected.");
-			} else {
-				duplicate.add(action);
-			}
-
-			final String clause = actionClauseArr.length == 1 ? "" : actionClauseArr[1];
-			ruleMap.put(action, clause.trim());
+			processRuleItem(ruleMap, duplicates, nextRule);
 		}
 		return ruleMap;
+	}
+
+	private static void processRuleItem(final Map<String, Object> ruleMap,
+			final List<String> duplicates, final String ruleItem)
+	{
+		if (!ruleItem.contains(":")) {
+			throw new JUnitCastException(
+					"A colon is required to separate the outcome followed by the rule clause.");
+		}
+
+		final String[] actionClauseArr = ruleItem.split(":");
+		if (actionClauseArr.length > 2) {
+			throw new JUnitCastException("Too many colons");
+		}
+
+		if (actionClauseArr.length == 1 || "".equals(actionClauseArr[0])) {
+			throw new JUnitCastException("Invalid colon placement");
+		}
+
+		final String action = actionClauseArr[0].trim();
+		if (duplicates.contains(action)) {
+			throw new JUnitCastException("Duplicate outcomes detected.");
+		} else {
+			duplicates.add(action);
+		}
+
+		ruleMap.put(action, actionClauseArr[1].trim());
+
 	}
 
 }

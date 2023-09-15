@@ -16,10 +16,11 @@ import java.util.stream.IntStream;
 import com.github.roycetech.ruleengine.Rule;
 import com.github.roycetech.ruleengine.converter.ElementConverter;
 import com.github.roycetech.ruleengine.converter.StringConverter;
+import com.github.roycetech.ruleengine.utils.StringUtil;
 
+import junitcast.initializer.ExemptInitializer;
 import junitcast.initializer.VariablesInitializer;
 import junitcast.util.RuleUtil;
-import junitcast.util.StringUtil;
 
 /**
  * TODO: Re-design to simplify.
@@ -106,7 +107,7 @@ public class ResourceFixture {
 		new VariablesInitializer(this).initialize();
 		initRules();
 		initIdentifier();
-		initExempt();
+		new ExemptInitializer(this).initialize();
 		initPair();
 	}
 
@@ -125,13 +126,13 @@ public class ResourceFixture {
 			final String exempt = getCaseExemptMap().get(index);
 			final List<String> caseId = getAttrList().get(index);
 
-			// @formatter:off	
+			// @formatter:off
 			retval.add(new CaseFixture(caseDesc, variables, rule)
 					.pair(pair).exempt(exempt)
 					.caseIdentifier(caseId)
 					.convert(this.caseConverterList.get(index))
 					.ruleConverter(this.ruleTokenConverter.get(index)));
-			// @formatter:on	
+			// @formatter:on
 		}
 		return retval;
 	}
@@ -155,7 +156,7 @@ public class ResourceFixture {
 		}
 
 		int caseIndex = this.debugStart;
-		while (true && caseIndex < 10) {
+		while (caseIndex < 10) {
 			final String key = ResourceKey.casedesc.name() + caseIndex++;
 			if (getResourceBundle().containsKey(key)) {
 				final String kaso = getResourceString(key);
@@ -281,7 +282,7 @@ public class ResourceFixture {
 	/**
 	 * Applies the conversion to the designated java object type to each item in the
 	 * group array.
-	 * 
+	 *
 	 * @param groupArray group array.
 	 * @param converter  element converter.
 	 */
@@ -304,42 +305,6 @@ public class ResourceFixture {
 			} else {
 				final String caseId = getCaseList().toArray(new String[getCaseList().size()])[i];
 				getAttrList().add(Arrays.asList(new String[] { caseId }));
-			}
-		}
-	}
-
-	/**
-	 * This will also include common exclusions for all.
-	 *
-	 * @param resBundle resource bundle instance.
-	 */
-	/* default */ void initExempt()
-	{
-		String commonExempt = null; // NOPMD: null default, conditionally redefine.
-		if (this.resourceBundle.containsKey(ResourceKey.commonexempt.name())) {
-			commonExempt = getResourceBundle().getString(ResourceKey.commonexempt.name());
-		}
-
-		for (int i = 0; i < getCaseList().size(); i++) {
-			final StringBuilder exemptRule = new StringBuilder();
-			final int actualIdx = i + this.debugStart;
-
-			final String key = String.valueOf(ResourceKey.exempt) + actualIdx;
-			String caseExempt = null; // NOPMD: null default, conditionally redefine.
-			if (this.resourceBundle.containsKey(key)) {
-				caseExempt = getResourceBundle().getString(key);
-			}
-
-			if (StringUtil.hasValue(commonExempt) && StringUtil.hasValue(caseExempt)) {
-				exemptRule.append(String.format("(%s)|%s", commonExempt, caseExempt));
-			} else if (StringUtil.hasValue(caseExempt)) {
-				exemptRule.append(caseExempt);
-			} else if (StringUtil.hasValue(commonExempt)) {
-				exemptRule.append(commonExempt);
-			}
-
-			if (StringUtil.hasValue(exemptRule.toString())) {
-				getCaseExemptMap().put(i, exemptRule.toString());
 			}
 		}
 	}
@@ -418,7 +383,7 @@ public class ResourceFixture {
 
 	/**
 	 * Returns the rule token converters.
-	 * 
+	 *
 	 * @return the ruleTokenConverter property
 	 */
 	public List<Map<String, ElementConverter>> getRuleTokenConverter()

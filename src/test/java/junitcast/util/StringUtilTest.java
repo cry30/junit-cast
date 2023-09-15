@@ -20,8 +20,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.runners.Parameterized.Parameters;
+
+import com.github.roycetech.ruleengine.utils.StringUtil;
 
 import junitcast.AbstractTransientValueTestCase;
 import junitcast.MockitoHelper;
@@ -51,7 +52,12 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 	/** */
 	enum Variable {
 		/** */
-		null_array, empty, normal, null_item
+		null_array, empty, normal, null_item,
+		/**
+		 * This additional test scenario is intended only to sweep the catch block in
+		 * the execute method.
+		 */
+		sweep_exception
 	}
 
 	/**
@@ -75,20 +81,33 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 		final ScenarioSource<String> source = new ScenarioSource<String>(this);
 		source.addTransientCase(0, null, Variable.null_array);
 		source.addTransientCase(0, new String[0], Variable.empty);
+		source.addTransientCase(0, "Invalid parameter to the trimArray", Variable.sweep_exception);
 
-		// @formatter:on
-		source.addTransientCase(0,
-				new String[] { " a", " b ", "         c                       ", "d" },
-				Variable.normal);
-
-		source.addTransientCase(0, new String[] { " a", "b ", " c                       ", null },
-				Variable.null_item);
 		// @formatter:off
+		source.addTransientCase(
+				0,
+				new String[] { 
+						" a", 
+						" b ", 
+						"         c                       ", 
+						"d" 
+				},
+				Variable.normal
+		);
+
+		source.addTransientCase(
+				0, 
+				new String[] { 
+						" a", 
+						"b ", 
+						" c                       ", 
+						null },
+				Variable.null_item);
+		// @formatter:on
 
 		source.notifyObservers();
 	}
 
- 
 	@Override
 	protected void execute()
 	{
@@ -99,7 +118,7 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 					.invoke(getMockSubject(), new Object[] { getTransientValue(0) });
 			if (result == null) {
 				setResult(null);
-				
+
 			} else {
 				final Object[] arr = (Object[]) result;
 				if (arr.length == 0) {
@@ -114,7 +133,7 @@ public class StringUtilTest extends AbstractTransientValueTestCase<StringUtil, S
 				| IllegalAccessException 
 				| InvocationTargetException 
 				| NoSuchMethodException e) {
-			Assert.fail(e.getMessage());
+			setResult("Error");
 		}
 		// @formatter:on
 	}

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package junitcast.initializer;
 
@@ -31,7 +31,7 @@ public class VariablesInitializer implements ResourceParameterInitializer {
 	public void initialize()
 	{
 		List<List<Object>> commonVars;
-		if (this.resourceFixture.getResourceBundle()
+		if (getResourceFixture().getResourceBundle()
 				.containsKey(ResourceFixture.ResourceKey.commonvar.name())) {
 			commonVars = getResourceFixture().fetchVariables(-1,
 					ResourceFixture.ResourceKey.commonvar.name(), ",", null);
@@ -39,29 +39,29 @@ public class VariablesInitializer implements ResourceParameterInitializer {
 			commonVars = new ArrayList<>();
 		}
 
-		for (int i = 0; i < this.resourceFixture.getCaseList().size(); i++) {
+		for (int i = 0; i < getResourceFixture().getCaseList().size(); i++) {
 			final int actualIdx = i + getResourceFixture().getDebugStart();
 			final String varkey = ResourceFixture.ResourceKey.var.name() + actualIdx;
 			final String convertkey = ResourceKey.converter.name() + actualIdx;
 
 			String converters = null; // NOPMD: null default, conditionally redefine.
 			if (getResourceFixture().getResourceBundle().containsKey(convertkey)) {
-				converters = this.resourceFixture.getResourceString(convertkey);
+				converters = getResourceFixture().getResourceString(convertkey);
 			}
 
-			this.resourceFixture.getRuleTokenConverter().add(new HashMap<>());
-			final List<List<Object>> caseVariables = this.resourceFixture.fetchVariables(i, varkey,
+			getResourceFixture().getRuleTokenConverter().add(new HashMap<>());
+			final List<List<Object>> caseVariables = getResourceFixture().fetchVariables(i, varkey,
 					",", converters);
 			final Set<List<Object>> specificVars = new LinkedHashSet<>();
 			caseVariables.addAll(commonVars);
 			caseVariables.addAll(specificVars);
-			this.resourceFixture.getCaseVarList().add(caseVariables);
+			getResourceFixture().getCaseVarList().add(caseVariables);
 		}
 	}
 
 	/**
-	 * Returns the bound resourceFixture for testability.
-	 * 
+	 * Returns the bound resourceFixture for test-ability.
+	 *
 	 * @return the bound resourceFixture instance.
 	 */
 	/* default */ ResourceFixture getResourceFixture()

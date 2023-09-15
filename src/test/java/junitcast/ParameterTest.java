@@ -57,7 +57,7 @@ public class ParameterTest
 	}
 
 	/** Test subject constructor parameter indices. */
-	enum ConstructorParameter {
+	/* default */ enum ConstructorParameter {
 		/** */
 		CaseDesc,
 		/** */
@@ -69,21 +69,21 @@ public class ParameterTest
 	}
 
 	/** List of variables that affect the test subject. */
-	enum Variable {
+	/* default */ enum Variable {
 
 		/** */
 		null_case_desc,
 		/** */
 		has_case_desc,
 		/** */
-		null_scenario,
+		empty_case_desc,
 
+		/** Null scenario */
+		null_scenario,
 		/** Empty scenario set. */
 		empty_scenario,
-
 		/** One element in scenario. */
 		one_scenario,
-
 		/** Three element in scenario. */
 		three_scenario,
 
@@ -118,11 +118,11 @@ public class ParameterTest
 	@Override
 	protected void prepare()
 	{
-		final ScenarioSource<String> source = new ScenarioSource<String>(this);
+		final ScenarioSource<String> source = new ScenarioSource<>(this);
 
 		source.addTransientCaseName(ConstructorParameter.CaseDesc, Variable.has_case_desc);
 
-		source.addTransientCase(ConstructorParameter.Scenario, new ArrayList<String>(),
+		source.addTransientCase(ConstructorParameter.Scenario, new ArrayList<>(),
 				Variable.empty_scenario);
 
 		source.addTransientCase(ConstructorParameter.Scenario,

@@ -78,8 +78,8 @@ public class CaseFixture<T> {
 	public CaseFixture(final String pCaseDesc, final List<List<T>> pVariables, final Rule pRule,
 			final String pPair) {
 		this(pCaseDesc, pVariables, pRule);
-		if (pPair == null)
-			return;
+//		if (pPair == null)
+//			return;
 
 		final String[] pairArr = pPair.split(":");
 		this.pairMap.put(pairArr[0], pairArr[1]);

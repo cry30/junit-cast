@@ -47,10 +47,10 @@ public class Parameter<E> {
 	 */
 	protected Parameter(final String pCaseDesc, final List<E> pScenario, final String pExpected,
 			final List<String> pIdentifier) {
-		super();
 
+		/** Difficult to test the empty case description. */
 		if (pCaseDesc == null || "".equals(pCaseDesc.trim())) {
-			throw new IllegalArgumentException("pExpected must not be null");
+			throw new IllegalArgumentException("pCaseDesc must not be null");
 		}
 
 		if (pScenario == null || pScenario.isEmpty()) {

@@ -60,7 +60,8 @@ public class ScenarioSource<S> {
 	 */
 	public ScenarioSource(final AbstractTestCase<?, S> pTestCase, final Object pVarSource) {
 		this.testCase = pTestCase;
-		this.enumType = findVariableEnum(pVarSource == null ? pTestCase : pVarSource);
+//		this.enumType = findVariableEnum(pVarSource == null ? pTestCase : pVarSource);
+		this.enumType = findVariableEnum(pTestCase);
 	}
 
 	/**

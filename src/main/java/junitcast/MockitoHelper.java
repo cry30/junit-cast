@@ -38,24 +38,12 @@ public class MockitoHelper {
 	 * @param testCase          Test case instance.
 	 * @param constructorParams test subject constructor parameters.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> void setupTargetObject(final AbstractTestCase<T, ?> testCase,
 			final List<Object> constructorParams)
 	{
-		final List<Object> params = constructorParams == null ? new ArrayList<>()
-				: constructorParams;
 		try {
 
-			Constructor<T> constructor;
-			if (params.isEmpty()) {
-				constructor = (Constructor<T>) testCase.getSubjectType()
-						.getDeclaredConstructors()[0];
-
-			} else {
-				constructor = (Constructor<T>) findConstructor(testCase.getSubjectType(),
-						constructorParams);
-			}
-
+			final Constructor<T> constructor = computeConstructor(testCase, constructorParams);
 			constructor.setAccessible(true);
 			T realSubject;
 			if (constructorParams == null) {
@@ -72,6 +60,19 @@ public class MockitoHelper {
 				| IllegalAccessException any) {
 			throw new JUnitCastException(any);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Constructor<T> computeConstructor(final AbstractTestCase<T, ?> testCase,
+			final List<Object> constructorParameters)
+	{
+		final List<Object> computedParameters = constructorParameters == null ? new ArrayList<>()
+				: constructorParameters;
+		if (computedParameters.isEmpty()) {
+			return (Constructor<T>) testCase.getSubjectType().getDeclaredConstructors()[0];
+		}
+
+		return (Constructor<T>) findConstructor(testCase.getSubjectType(), computedParameters);
 	}
 
 	/**

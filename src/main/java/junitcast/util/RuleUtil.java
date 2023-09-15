@@ -64,13 +64,18 @@ public final class RuleUtil {
 		}
 
 		final String action = actionClauseArr[0].trim();
+		checkDuplicates(duplicates, action);
+		ruleMap.put(action, actionClauseArr[1].trim());
+
+	}
+
+	private static void checkDuplicates(final List<String> duplicates, final String action)
+	{
 		if (duplicates.contains(action)) {
 			throw new JUnitCastException("Duplicate outcomes detected.");
 		} else {
 			duplicates.add(action);
 		}
-
-		ruleMap.put(action, actionClauseArr[1].trim());
 
 	}
 

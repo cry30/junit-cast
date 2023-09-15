@@ -58,9 +58,9 @@ public class ScenarioSource<S> {
 	 *
 	 * @param pTestCase the test class usually "this". Not null.
 	 */
-	public ScenarioSource(final AbstractTestCase<?, S> pTestCase, final Object pVarSource) {
+	public ScenarioSource(final AbstractTestCase<?, S> pTestCase, final Object _pVarSource) {
 		this.testCase = pTestCase;
-//		this.enumType = findVariableEnum(pVarSource == null ? pTestCase : pVarSource);
+//		this.enumType = findVariableEnum(pVarSource == null ? pTestCase : _pVarSource);
 		this.enumType = findVariableEnum(pTestCase);
 	}
 
@@ -71,7 +71,7 @@ public class ScenarioSource<S> {
 	 * @return null when Variable enum is not found.
 	 */
 	@SuppressWarnings("unchecked")
-	/* default */ Class<? extends Enum<?>> findVariableEnum(final Object pVarSource)
+	/* default */ final Class<? extends Enum<?>> findVariableEnum(final Object pVarSource)
 	{
 		for (final Class<?> innerClass : pVarSource.getClass().getDeclaredClasses()) {
 			if (innerClass.getSimpleName().startsWith("Var")) {
@@ -206,16 +206,28 @@ public class ScenarioSource<S> {
 			final Enum<?> nextEnum = Enum.valueOf(this.enumType,
 					nextCase.toString().replaceAll(" ", ""));
 
-			final List<CaseObserver<S>> caseObsList = this.enumObsMap.get(nextEnum);
+			final List<CaseObserver<S>> caseObserverList = this.enumObsMap.get(nextEnum);
 
-			if (caseObsList != null) {
-				for (final CaseObserver<S> nextCaseObserver : caseObsList) {
-					nextCaseObserver.prepareCase(i, nextCase);
-				}
-			}
+			prepareObserver(nextCase, i, caseObserverList);
 		}
 
 		this.enumObsMap.clear();
+	}
+
+	/**
+	 * Refactored out of #notifyObservers.
+	 * 
+	 * @param caseObsList the observers list.
+	 */
+	private void prepareObserver(final S nextCase, final int scenarioIndex,
+			final List<CaseObserver<S>> caseObsList)
+	{
+		if (caseObsList != null) {
+			for (final CaseObserver<S> nextCaseObserver : caseObsList) {
+				nextCaseObserver.prepareCase(scenarioIndex, nextCase);
+			}
+		}
+
 	}
 
 	/**
@@ -223,7 +235,7 @@ public class ScenarioSource<S> {
 	 * 
 	 * @return the testCase transient value at the given key.
 	 */
-	Object getTestCaseTransientValue(final String key)
+	/* default */ Object getTestCaseTransientValue(final String key)
 	{
 		return ((AbstractTransientValueTestCase<?, S, ?>) this.testCase).getTransientValue(key);
 	}

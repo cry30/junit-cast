@@ -16,66 +16,80 @@
 package junitcast.example;
 
 /**
- * @author Royce Remulla
+ * Demo class with different types of factors that affect the outcome. Double
+ * for the passing grade and a string for the position type.
  */
 public class MultiType {
 
-    /** Position being applied for. */
-    public enum Position {
-        /** */
-        Special(10), Regular(7);
+	/** Position being applied for. */
+	public enum Position {
+		/** */
+		Special(10), Regular(7);
 
-        /** Minimum passing grade. */
-        private final double minPassGrade;
+		/** Minimum passing grade. */
+		private final double minPassGrade;
 
-        /**
-         * @param pMinPassGrade minimum passing grade for the position.
-         */
-        Position(final double pMinPassGrade) {
-            this.minPassGrade = pMinPassGrade;
-        }
+		/**
+		 * @param pMinPassGrade minimum passing grade for the position.
+		 */
+		Position(final double pMinPassGrade) {
+			this.minPassGrade = pMinPassGrade;
+		}
 
-        double getMinimumGrade()
-        {
-            return this.minPassGrade;
-        }
+		double getMinimumGrade()
+		{
+			return this.minPassGrade;
+		}
 
-    }
+	}
 
-    /**
-     * 
-     * @param position Position being applied for.
-     * @param grade from 1 to 10.
-     */
-    public void applyForJob(final Position position, final double grade)
-    {
+	/**
+	 * 
+	 * @param position Position being applied for.
+	 * @param grade    from 1 to 10.
+	 */
+	public void applyForJob(final Position position, final double grade)
+	{
 
-        if (position == Position.Special) {
-            if (grade == Position.Special.getMinimumGrade()) {
-                recruit();
-            } else {
-                reject();
-            }
-        } else if (position == Position.Regular) {
-            if (grade >= Position.Regular.getMinimumGrade()) {
-                recruit();
-            } else {
-                reject();
-            }
-        }
+		if (position == Position.Special) {
+			applyForSpecial(grade);
 
-    }
+		} else if (position == Position.Regular) {
+			applyForRegular(grade);
 
-    /** reject job application. */
-    void reject()
-    {
-        //used to demo testing of unimplemented dependency.
-    }
+		}
 
-    /** accept job application. */
-    void recruit()
-    {
-        //used to demo testing of unimplemented dependency.        
-    }
+	}
+
+	private void applyForSpecial(final double grade)
+	{
+		if (grade == Position.Special.getMinimumGrade()) {
+			recruit();
+		} else {
+			reject();
+		}
+
+	}
+
+	private void applyForRegular(final double grade)
+	{
+		if (grade >= Position.Regular.getMinimumGrade()) {
+			recruit();
+		} else {
+			reject();
+		}
+	}
+
+	/** reject job application. */
+	void reject()
+	{
+		// used to demo testing of unimplemented dependency.
+	}
+
+	/** accept job application. */
+	void recruit()
+	{
+		// used to demo testing of unimplemented dependency.
+	}
 
 }

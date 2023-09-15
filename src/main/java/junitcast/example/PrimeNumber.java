@@ -22,28 +22,38 @@ package junitcast.example;
  */
 public class PrimeNumber {
 
-    /**
-     * Returns true if input is positive and is a prime number.
-     * 
-     * @param input integer input.
-     */
-    public boolean isPrimeNumber(final int input)
-    {
-        boolean primeYes = true; //NOPMD: true default, conditionally redefine.
-        if (input <= 0) {
-            throw new IllegalArgumentException("Invalid number: " + input);
-        } else if (input == 1) {
-        		primeYes = false;
-        } else if (input > 2) {
+	/**
+	 * Returns true if input is positive and is a prime number.
+	 * 
+	 * @param input integer input.
+	 */
+	public boolean isPrimeNumber(final int input)
+	{
+		if (input <= 0) {
+			throw new IllegalArgumentException("Invalid number: " + input);
 
-            for (int i = 2; i < input; i++) {
-                primeYes = input % i != 0;
-                if (!primeYes) {
-                    break;
-                }
-            }
-        }
-        return primeYes;
-    }
+		} else if (input == 1) {
+			return false;
+		}
+
+		return computePrimeNumber(input);
+	}
+
+	/**
+	 * Refactored out of {@link #isPrimeNumber(int)}. Handles the positive scenarios
+	 * only.
+	 * 
+	 * @param input integer input.
+	 */
+	private boolean computePrimeNumber(final int input)
+	{
+
+		for (int i = 2; i < input; i++) {
+			final boolean primeYes = input % i != 0;
+			if (!primeYes)
+				return false;
+		}
+		return true;
+	}
 
 }

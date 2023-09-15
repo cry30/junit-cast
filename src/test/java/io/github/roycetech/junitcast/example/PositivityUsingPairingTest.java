@@ -1,24 +1,28 @@
+/**
+ *
+ */
 package io.github.roycetech.junitcast.example;
 
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.runners.Parameterized.Parameters;
+
 import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-
-import org.junit.runners.Parameterized.Parameters;
+import io.github.roycetech.junitcast.example.Positivity;
 
 /**
- * Template Test class.
+ * Test class for Positivity.
  */
-public class TemplateTest extends
-		AbstractTransientValueTestCase<Template, String, String> {
+public class PositivityUsingPairingTest
+		extends AbstractTransientValueTestCase<Positivity, Integer, Integer> {
 
 	/**
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
 	 */
-	public TemplateTest(final Parameter<String> pParameter) {
+	public PositivityUsingPairingTest(final Parameter<Integer> pParameter) {
 		super(pParameter);
 	}
 
@@ -26,7 +30,7 @@ public class TemplateTest extends
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new Template());
+		setMockSubject(new Positivity());
 	}
 
 	/**
@@ -49,7 +53,7 @@ public class TemplateTest extends
 	@Override
 	protected void prepare()
 	{
-		for (final String scenarioToken : getParameter().getScenario()) {
+		for (final Integer scenarioToken : getParameter().getScenario()) {
 			setTransientValue(0, scenarioToken);
 		}
 	}
@@ -58,12 +62,7 @@ public class TemplateTest extends
 	@Override
 	protected void execute()
 	{
-		try {
-			setResult(String.valueOf(getMockSubject().isPrimeNumber(
-				getTransientValue(0))));
-		} catch (final IllegalArgumentException iae) {
-			setResult("ERROR");
-		}
+		setResult(String.valueOf(getMockSubject().isPositive(getTransientValue(0))));
 	}
 
 }

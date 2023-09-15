@@ -60,7 +60,7 @@ and update with the necessary type arguments.
 3.  Connect our properties file so we can generate the inputs and know about the rules.
 
 ```java
-return new ParameterGenerator<Integer>().genVarData("junitcast.example.PrimeNumberTest");
+return new ParameterGenerator<Integer>().genVarData("io.github.roycetech.junitcast.example.PrimeNumberTest");
 ```
 
 4.  Inside our **prepare** method, we can go through all the possible scenarios. 
@@ -85,4 +85,4 @@ observe the output:
 ![](./assets/images/positivity-test-result.png)
 
 
-See [](./src/main/test/java/junitcast/example) for more examples.
+See [](./src/main/test/java/io.github.roycetech.junitcast/example) for more examples.

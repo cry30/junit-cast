@@ -1,24 +1,42 @@
+/**
+ *   Copyright 2013 Royce Remulla
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package io.github.roycetech.junitcast.example;
 
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.runners.Parameterized.Parameters;
+
 import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
-
-import org.junit.runners.Parameterized.Parameters;
+import io.github.roycetech.junitcast.example.PrimeNumber;
 
 /**
- * Template Test class.
+ * Test class for PrimeNumber.
+ *
+ * @author Royce Remulla.
  */
-public class TemplateTest extends
-		AbstractTransientValueTestCase<Template, String, String> {
+public class PrimeNumberTest extends
+		AbstractTransientValueTestCase<PrimeNumber, Integer, Integer> {
 
 	/**
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
 	 */
-	public TemplateTest(final Parameter<String> pParameter) {
+	public PrimeNumberTest(final Parameter<Integer> pParameter) {
 		super(pParameter);
 	}
 
@@ -26,7 +44,7 @@ public class TemplateTest extends
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new Template());
+		setMockSubject(new PrimeNumber());
 	}
 
 	/**
@@ -40,16 +58,15 @@ public class TemplateTest extends
 	@Parameters(name = "{0}")
 	public static Collection<Object[]> generateData()
 	{
-		final String currentClassName = new Object() {
-		}.getClass().getEnclosingClass().getName();
-		return new ParameterGenerator<String>().genVarData(currentClassName);
+		return new ParameterGenerator<Integer>()
+			.genVarData("io.github.roycetech.junitcast.example.PrimeNumberTest");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	protected void prepare()
 	{
-		for (final String scenarioToken : getParameter().getScenario()) {
+		for (final Integer scenarioToken : getParameter().getScenario()) {
 			setTransientValue(0, scenarioToken);
 		}
 	}

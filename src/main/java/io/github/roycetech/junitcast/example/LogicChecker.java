@@ -20,14 +20,14 @@ package io.github.roycetech.junitcast.example;
  */
 public class LogicChecker {
 
-    /**
-     * Perform logical AND operation on two arguments.
-     *
-     * @param argument1 first argument.
-     * @param argument2 second argument.
-     */
-    public boolean and(final boolean argument1, final boolean argument2)
-    {
-        return argument1 && argument2;
-    }
+	/**
+	 * Perform logical AND operation on two arguments.
+	 *
+	 * @param argument1 first argument.
+	 * @param argument2 second argument.
+	 */
+	public boolean and(final boolean argument1, final boolean argument2)
+	{
+		return argument1 && argument2;
+	}
 }

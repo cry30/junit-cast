@@ -19,53 +19,53 @@ package io.github.roycetech.junitcast.example;
 public class Worker {
 
 
-    /** */
-    public enum Day {
-        /** */
-        Sunday,
-        /** */
-        Monday,
-        /** */
-        Tuesday,
-        /** */
-        Wednesday,
-        /** */
-        Thursday,
-        /** */
-        Friday,
-        /** */
-        Saturday
-    }
+	/** */
+	public enum Day {
+		/** */
+		Sunday,
+		/** */
+		Monday,
+		/** */
+		Tuesday,
+		/** */
+		Wednesday,
+		/** */
+		Thursday,
+		/** */
+		Friday,
+		/** */
+		Saturday
+	}
 
 
-    /**
-     * True if all of these rules are satisfied: <br/>
-     * <ul>
-     * <li>Monday to Saturday.
-     * <li>Not Holiday
-     * </ul>
-     *
-     * @param context dummy session context.
-     */
-    public boolean hasWork(final Object context)
-    {
-        return !isHoliday() && Day.Sunday != getDayOfTheWeek();
-    }
+	/**
+	 * True if all of these rules are satisfied: <br/>
+	 * <ul>
+	 * <li>Monday to Saturday.
+	 * <li>Not Holiday
+	 * </ul>
+	 *
+	 * @param context dummy session context.
+	 */
+	public boolean hasWork(final Object context)
+	{
+		return !isHoliday() && Day.Sunday != getDayOfTheWeek();
+	}
 
-    /**
-     * Intentionally unimplemented.
-     */
-    public boolean isHoliday()
-    {
-        return false;
-    }
+	/**
+	 * Intentionally unimplemented.
+	 */
+	public boolean isHoliday()
+	{
+		return false;
+	}
 
-    /**
-     * Intentionally unimplemented.
-     */
-    public Day getDayOfTheWeek()
-    {
-        return Day.Sunday;
-    }
+	/**
+	 * Intentionally unimplemented.
+	 */
+	public Day getDayOfTheWeek()
+	{
+		return Day.Sunday;
+	}
 
 }

@@ -25,20 +25,20 @@ package io.github.roycetech.junitcast;
  */
 public interface TransientValue<V> {
 
-    /**
-     * Get transient value from the given index.
-     *
-     * @param key dictionary key.
-     * @return the testParameter at the given index.
-     */
-    V getTransientValue(final Object key);
+	/**
+	 * Get transient value from the given index.
+	 *
+	 * @param key dictionary key.
+	 * @return the testParameter at the given index.
+	 */
+	V getTransientValue(final Object key);
 
-    /**
-     * Set transient value on a given index.
-     *
-     * @param key dictionary key.
-     * @param pValue the testParameter to set
-     */
-    void setTransientValue(final Object key, final V pValue);
+	/**
+	 * Set transient value on a given index.
+	 *
+	 * @param key dictionary key.
+	 * @param pValue the testParameter to set
+	 */
+	void setTransientValue(final Object key, final V pValue);
 
 }

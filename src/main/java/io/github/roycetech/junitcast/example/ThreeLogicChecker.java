@@ -20,17 +20,17 @@ package io.github.roycetech.junitcast.example;
  */
 public class ThreeLogicChecker {
 
-    /**
-     * Applies logical first or second and third. This will evaluate as (first || (second && third)).
-     *
-     * @param first rtfc.
-     * @param second rtfc.
-     * @param third rtfc.
-     */
-    public boolean evaluate(final boolean first, final boolean second, final boolean third)
-    {
-        return first || second && third;
-    }
+	/**
+	 * Applies logical first or second and third. This will evaluate as (first || (second && third)).
+	 *
+	 * @param first rtfc.
+	 * @param second rtfc.
+	 * @param third rtfc.
+	 */
+	public boolean evaluate(final boolean first, final boolean second, final boolean third)
+	{
+		return first || second && third;
+	}
 
 
 }

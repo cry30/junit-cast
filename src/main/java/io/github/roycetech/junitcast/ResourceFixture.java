@@ -25,8 +25,6 @@ import io.github.roycetech.junitcast.initializer.VariablesInitializer;
 import io.github.roycetech.junitcast.util.RuleUtil;
 
 /**
- * TODO: Re-design to simplify.
- *
  * This uses resource bundle to configure test case. REVIEW: Lasagne code.
  *
  * @author Royce Remulla
@@ -65,7 +63,7 @@ public class ResourceFixture {
 	private transient int debugStart;
 
 	/** Converter map. */
-	private static Map<Class<? extends ElementConverter>, ElementConverter> convertMap = new ConcurrentHashMap<>();
+	private static final Map<Class<? extends ElementConverter>, ElementConverter> convertMap = new ConcurrentHashMap<>();
 
 	/** The configuration to be parsed by this instance. */
 	private final transient ResourceBundle resourceBundle;
@@ -82,11 +80,11 @@ public class ResourceFixture {
 		commonexempt, commonvar,
 
 		/** */
-		converter, debug_index;
+		converter, debug_index
 	}
 
 	/**
-	 * @param pResource resource uri.
+	 * @param resourceUri resource uri.
 	 */
 	public ResourceFixture(final String resourceUri) {
 		if (resourceUri == null) {
@@ -286,8 +284,7 @@ public class ResourceFixture {
 	 */
 	/* default */ List<Object> convert(final String[] groupArray, final ElementConverter converter)
 	{
-		return Arrays.asList(groupArray).stream().map(converter::convert)
-				.collect(Collectors.toList());
+		return Arrays.stream(groupArray).map(converter::convert).collect(Collectors.toList());
 	}
 
 	/**

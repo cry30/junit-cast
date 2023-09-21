@@ -20,7 +20,8 @@ public class CasesInitializer implements ResourceParameterInitializer {
 	 * @param resourceFixture The ResourceFixture instance to initialize case
 	 *                        description and starting index from.
 	 */
-	public CasesInitializer(final ResourceFixture resourceFixture) {
+	public CasesInitializer(final ResourceFixture resourceFixture)
+	{
 		this.resourceFixture = resourceFixture;
 	}
 
@@ -41,9 +42,9 @@ public class CasesInitializer implements ResourceParameterInitializer {
 	{
 		if (getResourceFixture().getResourceBundle().containsKey(ResourceKey.debug_index.name())) {
 			final String debugStartStr = getResourceFixture()
-					.getResourceString(ResourceKey.debug_index.name()).trim();
+				.getResourceString(ResourceKey.debug_index.name()).trim();
 			try {
-				getResourceFixture().setDebugStart(Integer.valueOf(debugStartStr));
+				getResourceFixture().setDebugStart(Integer.parseInt(debugStartStr));
 			} catch (final NumberFormatException e) {
 				getResourceFixture().setDebugStart(0);
 			}

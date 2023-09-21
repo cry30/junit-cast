@@ -3,14 +3,12 @@
  */
 package io.github.roycetech.junitcast.initializer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import io.github.roycetech.junitcast.ResourceFixture;
 import io.github.roycetech.junitcast.ResourceFixture.ResourceKey;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class initializes the var parameter from the resource fixture. This was
@@ -26,7 +24,8 @@ public class VariablesInitializer implements ResourceParameterInitializer {
 	 * @param resourceFixture The ResourceFixture instance to initialize variables
 	 *                        from.
 	 */
-	public VariablesInitializer(final ResourceFixture resourceFixture) {
+	public VariablesInitializer(final ResourceFixture resourceFixture)
+	{
 		this.resourceFixture = resourceFixture;
 	}
 
@@ -38,9 +37,9 @@ public class VariablesInitializer implements ResourceParameterInitializer {
 	{
 		List<List<Object>> commonVars;
 		if (getResourceFixture().getResourceBundle()
-				.containsKey(ResourceFixture.ResourceKey.commonvar.name())) {
+			.containsKey(ResourceFixture.ResourceKey.commonvar.name())) {
 			commonVars = getResourceFixture().fetchVariables(-1,
-					ResourceFixture.ResourceKey.commonvar.name(), ",", null);
+				ResourceFixture.ResourceKey.commonvar.name(), ",", null);
 		} else {
 			commonVars = new ArrayList<>();
 		}
@@ -57,10 +56,8 @@ public class VariablesInitializer implements ResourceParameterInitializer {
 
 			getResourceFixture().getRuleTokenConverter().add(new HashMap<>());
 			final List<List<Object>> caseVariables = getResourceFixture().fetchVariables(i, varkey,
-					",", converters);
-			final Set<List<Object>> specificVars = new LinkedHashSet<>();
+				",", converters);
 			caseVariables.addAll(commonVars);
-			caseVariables.addAll(specificVars);
 			getResourceFixture().getCaseVarList().add(caseVariables);
 		}
 	}

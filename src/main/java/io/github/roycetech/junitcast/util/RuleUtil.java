@@ -15,8 +15,11 @@ import io.github.roycetech.junitcast.JUnitCastException;
  */
 public final class RuleUtil {
 
-	/** Utility class. */
-	private RuleUtil() {
+	/**
+	 * Utility class.
+	 */
+	private RuleUtil()
+	{
 	}
 
 	/**
@@ -24,7 +27,6 @@ public final class RuleUtil {
 	 * string.
 	 *
 	 * @param ruleDefinition the mapping of outcome to clause in a text form.
-	 *
 	 * @return a map instance with the outcome to clause mapping.
 	 */
 	public static Map<String, Object> parseRuleDefinition(final String ruleDefinition)
@@ -45,12 +47,20 @@ public final class RuleUtil {
 		return ruleMap;
 	}
 
+	/**
+	 * Refactored out of {@link #parseRuleDefinition(String)}, process the next rule
+	 * item from the list.
+	 *
+	 * @param ruleMap    the rule mapping containing the parsed rules.
+	 * @param duplicates the list used for tracking the duplicates.
+	 * @param ruleItem   the next rule item to parse.
+	 */
 	private static void processRuleItem(final Map<String, Object> ruleMap,
-			final List<String> duplicates, final String ruleItem)
+										final List<String> duplicates, final String ruleItem)
 	{
 		if (!ruleItem.contains(":")) {
 			throw new JUnitCastException(
-					"A colon is required to separate the outcome followed by the rule clause.");
+				"A colon is required to separate the outcome followed by the rule clause.");
 		}
 
 		final String[] actionClauseArr = ruleItem.split(":");
@@ -68,12 +78,19 @@ public final class RuleUtil {
 
 	}
 
-	private static void checkDuplicates(final List<String> duplicates, final String action)
+	/**
+	 * Refactored out of {@link #parseRuleDefinition(String)}, validates that the
+	 * rule does not fall in to multiple outcomes.
+	 *
+	 * @param duplicates the list used to monitor the duplicity.
+	 * @param outcome    the rule outcome to check.
+	 */
+	private static void checkDuplicates(final List<String> duplicates, final String outcome)
 	{
-		if (duplicates.contains(action)) {
+		if (duplicates.contains(outcome)) {
 			throw new JUnitCastException("Duplicate outcomes detected.");
 		} else {
-			duplicates.add(action);
+			duplicates.add(outcome);
 		}
 
 	}

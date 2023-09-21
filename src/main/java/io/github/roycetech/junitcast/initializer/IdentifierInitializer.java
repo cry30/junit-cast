@@ -4,6 +4,7 @@
 package io.github.roycetech.junitcast.initializer;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.github.roycetech.ruleengine.utils.StringUtil;
 
@@ -24,11 +25,14 @@ public class IdentifierInitializer implements ResourceParameterInitializer {
 	 * @param resourceFixture The ResourceFixture instance to initialize case ID
 	 *                        from.
 	 */
-	public IdentifierInitializer(final ResourceFixture resourceFixture) {
+	public IdentifierInitializer(final ResourceFixture resourceFixture)
+	{
 		this.resourceFixture = resourceFixture;
 	}
 
-	/** Initializes the case ID list. */
+	/**
+	 * Initializes the case ID list.
+	 */
 	@Override
 	public void initialize()
 	{
@@ -38,11 +42,11 @@ public class IdentifierInitializer implements ResourceParameterInitializer {
 			if (getResourceFixture().getResourceBundle().containsKey(key)) {
 				final String raw = getResourceFixture().getResourceString(key);
 				getResourceFixture().getAttrList()
-						.add(Arrays.asList(StringUtil.trimArray(raw.split(","))));
+					.add(Arrays.asList(StringUtil.trimArray(raw.split(","))));
 			} else {
 				final String caseId = getResourceFixture().getCaseList()
-						.toArray(new String[getResourceFixture().getCaseList().size()])[i];
-				getResourceFixture().getAttrList().add(Arrays.asList(new String[] { caseId }));
+					.toArray(new String[0])[i];
+				getResourceFixture().getAttrList().add(List.of(caseId));
 			}
 		}
 	}

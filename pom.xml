@@ -3,6 +3,7 @@
 	<groupId>io.github.roycetech</groupId>
 	<artifactId>junit-cast</artifactId>
 	<version>2.0.0</version>
+	<name>JUnit Cast</name>
 	<description>A library that leverages the JUnit parameterized tests to test all scenarios provided.
 	</description>
 	<url>https://github.com/roycetech/rule-engine</url>

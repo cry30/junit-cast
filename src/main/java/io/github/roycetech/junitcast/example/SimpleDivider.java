@@ -16,16 +16,21 @@
 package io.github.roycetech.junitcast.example;
 
 /**
- * @author Royce Remulla
+ * An example class for testing that accepts two integer parameters.
  */
 public class SimpleDivider {
+
+	/** Creates instance of this example class. */
+	public SimpleDivider() {
+	}
 
 	/**
 	 * Return quotient. Return 0 for -0 result.
 	 *
 	 * @param dividend any integer from Integer.MIN_VALUE to Integer.MAX_VALUE.
 	 * @param divisor must not be 0.
-	 * @throws Illegal argument exception when 0 divisor is passed.
+	 * @return the quotient.
+	 * @throws IllegalArgumentException exception when 0 divisor is passed.
 	 */
 	public double divide(final int dividend, final int divisor)
 	{

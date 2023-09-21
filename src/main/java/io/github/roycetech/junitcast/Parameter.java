@@ -40,6 +40,8 @@ public class Parameter<E> {
 	private final transient List<String> identifier;
 
 	/**
+	 * Creates instance of this parameter class to be used in a parameterized test.
+	 *
 	 * @param pCaseDesc   case description, must not be null.
 	 * @param pScenario   current scenario, must neither be null nor empty.
 	 * @param pExpected   expected result, must not be null or empty.
@@ -79,13 +81,20 @@ public class Parameter<E> {
 	}
 
 	/**
-	 * @return the identifier
+	 * Retrieves the identifier list.
+	 *
+	 * @return The list of identifiers.
 	 */
 	public List<String> getIdentifier()
 	{
 		return this.identifier;
 	}
 
+	/**
+	 * Retrieves the scenario list.
+	 *
+	 * @return The list of scenario elements.
+	 */
 	public List<E> getScenario()
 	{
 		return this.scenario;
@@ -95,7 +104,6 @@ public class Parameter<E> {
 	 * This will appear in the test runner grid. New lines break the test runner so
 	 * we exclude them.
 	 *
-	 * @see {@link Object#toString()}
 	 * @return String representation of this instance.
 	 */
 	@Override

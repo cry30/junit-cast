@@ -17,15 +17,24 @@ package io.github.roycetech.junitcast.example;
 
 /**
  * Checks if a number is prime number or not.
- *
- * @author r39
  */
 public class PrimeNumber {
+
+
+ /**
+     * Default constructor for instantiating this test class.
+     *
+     * Note: This constructor does not perform any meaningful initialization.
+     */
+	public PrimeNumber() {
+	}
 
 	/**
 	 * Returns true if input is positive and is a prime number.
 	 *
 	 * @param input integer input.
+	 * @return true if the {@code input} is deemed as prime.
+	 * @throws IllegalArgumentException when the passed number below 1, which are considered invalid in this context.
 	 */
 	public boolean isPrimeNumber(final int input)
 	{
@@ -44,6 +53,7 @@ public class PrimeNumber {
 	 * only.
 	 *
 	 * @param input integer input.
+	 * @return whether the passed {@code input} is a prime number or not.
 	 */
 	private boolean computePrimeNumber(final int input)
 	{

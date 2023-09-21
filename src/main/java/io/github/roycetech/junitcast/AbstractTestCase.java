@@ -33,8 +33,6 @@ import org.junit.runners.Parameterized;
  *
  * Preparation. Execution(and Conversion). Assertion(or Verification).
  *
- * @author Royce Remulla.
- *
  * @param <T> Test Object instance type. Does not support generic types, you can
  *            omit the generic argument of test subject type.
  * @param <E> data type of scenario element. Use object if scenario contain
@@ -59,6 +57,8 @@ public abstract class AbstractTestCase<T, E> {
 	private transient Object result;
 
 	/**
+	 * Instantiates a basic JUnitCast test case.
+	 *
 	 * @param pParameter data transfer object to be injected by Parameterized test
 	 *                   runner.
 	 */
@@ -114,7 +114,8 @@ public abstract class AbstractTestCase<T, E> {
 	 * Execution. Result output and exception must be converted to a valid output
 	 * token to be processed during assertion/verification.
 	 *
-	 * @return output matching the rule in the property file.
+	 * set the output by invoking the {@link #setResult(Object)} method. It needs to
+	 * match a result defined in the test configuration file.
 	 */
 	protected abstract void execute();
 
@@ -152,6 +153,9 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
+	 * Returns the mock instance or the spied system under test that is ready for
+	 * stubbing.
+	 *
 	 * @return the mock instance.
 	 */
 	protected T getMockSubject()
@@ -160,6 +164,8 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
+	 * Sets the mock subject. This shouldn't be called called by the client test.
+	 *
 	 * @param pMockSubject test subject instance.
 	 */
 	protected void setMockSubject(final T pMockSubject)
@@ -168,7 +174,9 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
-	 * @return the realObject
+	 * Retrieves the real subject contained with this test object.
+	 *
+	 * @return The real subject object that this class contains.
 	 */
 	public T getRealSubject()
 	{
@@ -176,7 +184,9 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
-	 * @param realObject the realObject to set
+	 * Sets the real subject for this test object.
+	 *
+	 * @param realObject The real subject object to be contained with this object.
 	 */
 	protected void setRealSubject(final T realObject)
 	{
@@ -184,7 +194,9 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
-	 * @return the targetType
+	 * Retrieves the type of the test subject.
+	 *
+	 * @return The class representing the type of the test subject.
 	 */
 	protected Class<T> getSubjectType()
 	{
@@ -192,20 +204,29 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
-	 * @param pSubjectType the subjectType to set
+	 * Sets the type of the test subject.
+	 *
+	 * @param pSubjectType The class representing the type of the test subject.
 	 */
 	private void setSubjectType(final Class<T> pSubjectType)
 	{
 		this.subjectType = pSubjectType;
 	}
 
+	/**
+	 * Retrieves the parameter associated with the execution.
+	 *
+	 * @return The parameter associated with the execution.
+	 */
 	public Parameter<E> getParameter()
 	{
 		return this.parameter;
 	}
 
 	/**
-	 * Transient place holder for execution result.
+	 * Retrieves the transient placeholder for the execution result.
+	 *
+	 * @return The execution result.
 	 */
 	public Object getResult()
 	{
@@ -213,11 +234,12 @@ public abstract class AbstractTestCase<T, E> {
 	}
 
 	/**
-	 * @param pResult the result to set
+	 * Sets the execution result in the temporary location for an expected assertion.
+	 *
+	 * @param pResult the outcome of the execution.
 	 */
 	public void setResult(final Object pResult)
 	{
 		this.result = pResult;
 	}
-
 }

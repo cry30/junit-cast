@@ -20,6 +20,12 @@ public class VariablesInitializer implements ResourceParameterInitializer {
 
 	private final ResourceFixture resourceFixture;
 
+	/**
+	 * Constructs a new VariablesInitializer instance.
+	 *
+	 * @param resourceFixture The ResourceFixture instance to initialize variables
+	 *                        from.
+	 */
 	public VariablesInitializer(final ResourceFixture resourceFixture) {
 		this.resourceFixture = resourceFixture;
 	}

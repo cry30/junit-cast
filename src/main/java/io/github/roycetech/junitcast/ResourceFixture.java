@@ -25,14 +25,14 @@ import io.github.roycetech.junitcast.initializer.VariablesInitializer;
 import io.github.roycetech.junitcast.util.RuleUtil;
 
 /**
- * This uses resource bundle to configure test case. REVIEW: Lasagne code.
- *
- * @author Royce Remulla
+ * This uses resource bundle to configure test case.
  */
 @SuppressWarnings({ "PMD.GodClass", "PMD.TooManyMethods" })
 public class ResourceFixture {
 
-	/** Set of Cases. */
+	/**
+	 * Set of Cases.
+	 */
 	private final transient Set<String> casesSet = new LinkedHashSet<>();
 
 	/**
@@ -41,50 +41,112 @@ public class ResourceFixture {
 	 */
 	private final transient List<List<List<Object>>> caseVarList = new ArrayList<>();
 
-	/** */
+	/**
+	 *
+	 */
 	private final transient List<List<ElementConverter>> caseConverterList = new ArrayList<>();
 
-	/** Case to List of Rules. */
+	/**
+	 * Case to List of Rules.
+	 */
 	private final transient List<String> ruleList = new ArrayList<>();
 
-	/** */
+	/**
+	 *
+	 */
 	private final transient List<Map<String, ElementConverter>> ruleTokenConverter = new ArrayList<>();
 
-	/** Case to List of Attributes. */
+	/**
+	 * Case to List of Attributes.
+	 */
 	private final transient List<List<String>> attrList = new ArrayList<>();
 
-	/** Cases index, Set of exempt rules. */
+	/**
+	 * Cases index, Set of exempt rules.
+	 */
 	private final transient Map<Integer, String> caseExemptMap = new ConcurrentHashMap<>();
 
-	/** Pair mapping for binary cases. */
+	/**
+	 * Pair mapping for binary cases.
+	 */
 	private final transient Map<Integer, String> listPairMap = new ConcurrentHashMap<>();
 
-	/** Can be set in resource to skip prior indexes to speed up testing. */
+	/**
+	 * Can be set in resource to skip prior indexes to speed up testing.
+	 */
 	private transient int debugStart;
 
-	/** Converter map. */
+	/**
+	 * Converter map.
+	 */
 	private static final Map<Class<? extends ElementConverter>, ElementConverter> convertMap = new ConcurrentHashMap<>();
 
-	/** The configuration to be parsed by this instance. */
+	/**
+	 * The configuration to be parsed by this instance.
+	 */
 	private final transient ResourceBundle resourceBundle;
 
-	/** Resource file key prefix. */
+	/**
+	 * Resource file key prefix.
+	 */
 	public enum ResourceKey {
-		/** Essential configurations. */
-		casedesc, var, rule, pair,
+		/**
+		 * Case description configuration key.
+		 */
+		casedesc,
 
-		/** */
-		caseId, exempt,
+		/**
+		 * Variables configuration key.
+		 */
+		var,
 
-		/** Common configurations. */
-		commonexempt, commonvar,
+		/**
+		 * Rules configuration key.
+		 */
+		rule,
 
-		/** */
-		converter, debug_index
+		/**
+		 * Optional binary result configuration key.
+		 */
+		pair,
+
+		/**
+		 * Optional case ID configuration key.
+		 */
+		caseId,
+
+		/**
+		 * Optional exempt configuration key.
+		 */
+		exempt,
+
+		/**
+		 * Optional common exempt configuration key.
+		 */
+		commonexempt,
+
+		/**
+		 * Optional common variables configuration key.
+		 */
+		commonvar,
+
+		/**
+		 * Optional converters configuration key.
+		 */
+		converter,
+
+		/**
+		 * Optional configuration key for the starting test case for debugging.
+		 */
+		debug_index
 	}
 
 	/**
-	 * @param resourceUri resource uri.
+	 * Constructs a new ResourceFixture instance.
+	 *
+	 * @param resourceUri The URI of the resource to load. If null, the
+	 *                    resourceBundle will be set to null. Otherwise, it attempts
+	 *                    to load a resource bundle using the provided URI.
 	 */
 	public ResourceFixture(final String resourceUri) {
 		if (resourceUri == null) {
@@ -111,14 +173,16 @@ public class ResourceFixture {
 		initPair();
 	}
 
-	/** */
+	/**
+	 * Retrieves the list of test fixtures.
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<?> getFixtures()
 	{
 		generateCases();
-		final List<CaseFixture<String>> retval = new ArrayList<>(getCaseList().size());
+		final List<CaseFixture<String>> fixtureList = new ArrayList<>(getCaseList().size());
 		for (int index = 0; index < getCaseList().size(); index++) {
-			final String caseDesc = getCaseList().toArray(new String[getCaseList().size()])[index];
+			final String caseDesc = getCaseList().toArray(new String[0])[index];
 			final List<List<Object>> variables = getCaseVarList().get(index);
 
 			final Rule rule = new Rule(RuleUtil.parseRuleDefinition(getRuleList().get(index)));
@@ -127,20 +191,20 @@ public class ResourceFixture {
 			final List<String> caseId = getAttrList().get(index);
 
 			// @formatter:off
-			retval.add(new CaseFixture(caseDesc, variables, rule)
-					.pair(pair).exempt(exempt)
-					.caseIdentifier(caseId)
-					.convert(this.caseConverterList.get(index))
-					.ruleConverter(this.ruleTokenConverter.get(index)));
+			fixtureList.add(new CaseFixture(caseDesc, variables, rule)
+				.pair(pair).exempt(exempt)
+				.caseIdentifier(caseId)
+				.convert(this.caseConverterList.get(index))
+				.ruleConverter(this.ruleTokenConverter.get(index)));
 			// @formatter:on
 		}
-		return retval;
+		return fixtureList;
 	}
 
 	/**
 	 * Gets a string for the given key from this resource bundle. This method is
-	 * created for testability.
-	 *
+	 * created for test-ability.
+	 * @param key the resource key.
 	 * @return the string for the given key
 	 */
 	public String getResourceString(final String key)
@@ -159,10 +223,14 @@ public class ResourceFixture {
 	}
 
 	/**
+	 *
+	 *
 	 * @param caseIndex  case index.
 	 * @param key        resource key.
 	 * @param separator  values separator.
 	 * @param converters element type converter.
+	 *
+	 * @return all the variables combinations from the configuration.
 	 */
 	public List<List<Object>> fetchVariables(final int caseIndex, final String key,
 			final String separator, final String converters)
@@ -213,18 +281,18 @@ public class ResourceFixture {
 	/**
 	 * Refactored out of extractCombinations.
 	 *
-	 * @param caseIndex
-	 * @param elConvert
-	 * @param groupArray
+	 * @param caseIndex        - the next case index.
+	 * @param elementConverter - the next elementConverter.
+	 * @param groupArray       - not sure what this group is.
 	 */
-	private void remapConverterByToken(final int caseIndex, final ElementConverter elConvert,
+	private void remapConverterByToken(final int caseIndex, final ElementConverter elementConverter,
 			final String[] groupArray)
 	{
 		if (caseIndex > -1) { // TODO: Unsupported typed common variables.
 			for (final String nextGroup : groupArray) {
 				final Map<String, ElementConverter> ruleTokenMap = this.ruleTokenConverter
 						.get(caseIndex);
-				ruleTokenMap.put(nextGroup, elConvert);
+				ruleTokenMap.put(nextGroup, elementConverter);
 			}
 		}
 	}
@@ -232,19 +300,19 @@ public class ResourceFixture {
 	/**
 	 * Refactored out of {@link #extractCombinations(int, String, String, String)}
 	 *
-	 * @param converters
-	 * @param rawGroup
+	 * @param converters - the pipe delimited string representation of the
+	 *                   converters.
+	 * @param rawGroup   -
 	 * @return
 	 */
 	private String[] buildConverterArray(final String converters, final String[] rawGroup)
 	{
-		String[] converterArr;
 		if (StringUtil.hasValue(converters)) {
-			converterArr = converters.split("\\|");
-		} else {
-			converterArr = new String[rawGroup.length];
-			Arrays.fill(converterArr, StringConverter.class.getName());
+			return converters.split("\\|");
 		}
+
+		final String[] converterArr = new String[rawGroup.length];
+		Arrays.fill(converterArr, StringConverter.class.getName());
 		return converterArr;
 	}
 
@@ -309,7 +377,9 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @return the caseList
+	 * Gets the set of case descriptions.
+	 *
+	 * @return A set containing the description of the test cases.
 	 */
 	public Set<String> getCaseList()
 	{
@@ -317,7 +387,9 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @return the caseVarList
+	 * Gets the list of variable lists for each test case.
+	 *
+	 * @return A list containing variable lists for each test case.
 	 */
 	public List<List<List<Object>>> getCaseVarList()
 	{
@@ -325,7 +397,9 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @return the ruleList
+	 * Gets the list of rule strings for each test case.
+	 *
+	 * @return A list containing rule strings for each test case.
 	 */
 	public List<String> getRuleList()
 	{
@@ -333,7 +407,9 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @return the attrList
+	 * Gets the list of attribute lists for each test case.
+	 *
+	 * @return A list containing attribute lists for each test case.
 	 */
 	public List<List<String>> getAttrList()
 	{
@@ -341,12 +417,14 @@ public class ResourceFixture {
 	}
 
 	/**
-	 * @return the caseExempMap
+	 * Gets the mapping of case indices to exemption rules.
+	 *
+	 * @return A map containing exemption rules associated with specific case
+	 *         indices.
 	 */
 	public Map<Integer, String> getCaseExemptMap()
 	{
 		return this.caseExemptMap;
-
 	}
 
 	/**
@@ -380,11 +458,15 @@ public class ResourceFixture {
 	}
 }
 
-/** Custom class exception. */
+/**
+ * Custom class exception.
+ */
 class ResourceFixtureException extends RuntimeException {
 	private static final long serialVersionUID = 3996097978039160817L;
 
-	/** @param string exception message. */
+	/**
+	 * @param string exception message.
+	 */
 	/* default */ ResourceFixtureException(final String string, final Throwable cause) {
 		super(string, cause);
 	}

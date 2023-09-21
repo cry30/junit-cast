@@ -11,8 +11,7 @@ import java.util.Map;
 import io.github.roycetech.junitcast.JUnitCastException;
 
 /**
- * @author Royce Remulla
- *
+ * Utilities for working with the #r class.
  */
 public final class RuleUtil {
 

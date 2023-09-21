@@ -27,18 +27,18 @@ import org.junit.Before;
  * @param <T> Test Object instance type. subject type.
  * @param <S> data type of scenario element.
  * @param <V> transient value element type. Object is commonly used.
- *
- * @author Royce Remulla
  */
 public abstract class AbstractTransientValueTestCase<T, S, V> extends AbstractTestCase<T, S>
 		implements TransientValue<V> {
 
 	/** Case objects place holder. */
-	private transient Map<Object, V> transientMap; // = new HashMap<Object, V>();
+	private transient Map<Object, V> transientMap;
 
 	/**
+	 * Default constructor for this class.
+	 *
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test..
-	 * @see {@link AbstractTestCase#AbstractTestCase(Parameter)}.
+	 * For the base class with a simple support for transient values, @see {@link AbstractTestCase#AbstractTestCase(Parameter)}.
 	 */
 	public AbstractTransientValueTestCase(final Parameter<S> pParameter) {
 		super(pParameter);

@@ -16,10 +16,10 @@
 package io.github.roycetech.junitcast;
 
 /**
+ * Equivalent of CaseObserver but this time for the #execute method.
  */
 public interface AnswerObserver {
 
 	/** Initialize mock Answers based on the current parameters. */
 	void initAnswers();
-
 }

@@ -14,6 +14,12 @@ public class CasesInitializer implements ResourceParameterInitializer {
 
 	private final ResourceFixture resourceFixture;
 
+	/**
+	 * Constructs a new CasesInitializer instance.
+	 *
+	 * @param resourceFixture The ResourceFixture instance to initialize case
+	 *                        description and starting index from.
+	 */
 	public CasesInitializer(final ResourceFixture resourceFixture) {
 		this.resourceFixture = resourceFixture;
 	}

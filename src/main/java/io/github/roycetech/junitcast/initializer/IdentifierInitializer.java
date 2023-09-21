@@ -18,6 +18,12 @@ public class IdentifierInitializer implements ResourceParameterInitializer {
 
 	private final ResourceFixture resourceFixture;
 
+	/**
+	 * Constructs a new IdentifierInitializer instance.
+	 *
+	 * @param resourceFixture The ResourceFixture instance to initialize case ID
+	 *                        from.
+	 */
 	public IdentifierInitializer(final ResourceFixture resourceFixture) {
 		this.resourceFixture = resourceFixture;
 	}

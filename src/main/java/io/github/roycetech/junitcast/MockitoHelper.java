@@ -23,14 +23,19 @@ import java.util.List;
 import org.mockito.Mockito;
 
 /**
- * Helper class for mockito test subclasses. You need to reference Mockito
+ * Helper class for Mockito test subclasses. You need to reference Mockito
  * library 1.8+ if you want to subclass this.
- *
- * @author Royce Remulla
  */
 public class MockitoHelper {
 
 	/**
+	 * Default constructor with doesn't do any customization.
+	 */
+	public MockitoHelper() {}
+
+	/**
+	 * Sets up the test subject by inspecting the defined class types, and creating the spy object for easy stubbing of dependent components.
+	 *
 	 * @param <T>               Test Object instance type. Does not support generic
 	 *                          types, you can omit the generic argument of test
 	 *                          subject type. Must not be null.
@@ -39,7 +44,7 @@ public class MockitoHelper {
 	 * @param constructorParams test subject constructor parameters.
 	 */
 	public <T> void setupTargetObject(final AbstractTestCase<T, ?> testCase,
-			final List<Object> constructorParams)
+									  final List<Object> constructorParams)
 	{
 		try {
 
@@ -47,27 +52,27 @@ public class MockitoHelper {
 			constructor.setAccessible(true);
 			T realSubject;
 			if (constructorParams == null) {
-				realSubject = constructor.newInstance(new Object[0]);
+				realSubject = constructor.newInstance();
 			} else {
 				final int parameterCount = constructorParams.size();
 				final Object[] constructorParamsArray = constructorParams
-						.toArray(new Object[parameterCount]);
+					.toArray(new Object[parameterCount]);
 				realSubject = constructor.newInstance(constructorParamsArray);
 			}
 			testCase.setRealSubject(realSubject);
 			testCase.setMockSubject(Mockito.spy(testCase.getRealSubject()));
 		} catch (final InvocationTargetException | IllegalArgumentException | InstantiationException
-				| IllegalAccessException any) {
+					   | IllegalAccessException any) {
 			throw new JUnitCastException(any);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> Constructor<T> computeConstructor(final AbstractTestCase<T, ?> testCase,
-			final List<Object> constructorParameters)
+												  final List<Object> constructorParameters)
 	{
 		final List<Object> computedParameters = constructorParameters == null ? new ArrayList<>()
-				: constructorParameters;
+			: constructorParameters;
 		if (computedParameters.isEmpty()) {
 			return (Constructor<T>) testCase.getSubjectType().getDeclaredConstructors()[0];
 		}

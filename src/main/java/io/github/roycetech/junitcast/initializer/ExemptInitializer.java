@@ -16,6 +16,12 @@ public class ExemptInitializer implements ResourceParameterInitializer {
 
 	private final ResourceFixture resourceFixture;
 
+	/**
+	 * Constructs a new ExemptInitializer instance.
+	 *
+	 * @param resourceFixture The ResourceFixture instance to initialize exempts
+	 *                        from.
+	 */
 	public ExemptInitializer(final ResourceFixture resourceFixture) {
 		this.resourceFixture = resourceFixture;
 	}

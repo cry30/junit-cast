@@ -70,6 +70,8 @@ public class CaseFixture<T> {
 	}
 
 	/**
+	 * Creates an instance of this fixture with the necessary components for the test.
+	 *
 	 * @param pCaseDesc  case description.
 	 * @param pVariables case variables.
 	 * @param pRule      source output to rule mapping. (e.g. OUTPUT:true|false).
@@ -90,6 +92,7 @@ public class CaseFixture<T> {
 	 * Builder pattern.
 	 *
 	 * @param pPair output pair for binary output rules.
+	 * @return this instance of this class with the added pair property.
 	 */
 	public CaseFixture<T> pair(final String pPair)
 	{
@@ -109,6 +112,7 @@ public class CaseFixture<T> {
 	 * Builder pattern.
 	 *
 	 * @param pCaseId Case identifier.
+	 * @return this instance of this class with the added case ID property.
 	 */
 	public CaseFixture<T> caseIdentifier(final List<String> pCaseId)
 	{
@@ -120,6 +124,7 @@ public class CaseFixture<T> {
 	 * Builder pattern.
 	 *
 	 * @param pExempt exemption rule.
+	 * @return this instance of this class with the added exempt property.
 	 */
 	public CaseFixture<T> exempt(final String pExempt)
 	{
@@ -142,6 +147,7 @@ public class CaseFixture<T> {
 	 * Builder pattern.
 	 *
 	 * @param pConverters Element type converters.
+	 * @return this builder instance with the updated property.
 	 */
 	public CaseFixture<T> convert(final List<ElementConverter> pConverters)
 	{
@@ -152,6 +158,7 @@ public class CaseFixture<T> {
 	 * Builder pattern.
 	 *
 	 * @param pRuleConverter rule token converters.
+	 * @return this builder instance with the updated property.
 	 */
 	public CaseFixture<T> ruleConverter(final Map<String, ElementConverter> pRuleConverter)
 	{
@@ -191,7 +198,9 @@ public class CaseFixture<T> {
 	}
 
 	/**
-	 * @return the variables
+	 * Gets the list of variable lists.
+	 *
+	 * @return A list containing variable lists.
 	 */
 	public List<List<T>> getVariables()
 	{
@@ -199,7 +208,9 @@ public class CaseFixture<T> {
 	}
 
 	/**
-	 * @return the pairMap
+	 * Gets the mapping of action pairs.
+	 *
+	 * @return A map containing action pairs associated with specific keys.
 	 */
 	protected Map<String, String> getPairMap()
 	{
@@ -207,7 +218,9 @@ public class CaseFixture<T> {
 	}
 
 	/**
-	 * @return the reversePairMap
+	 * Gets the mapping of reverse action pairs.
+	 *
+	 * @return A map containing reverse action pairs associated with specific keys.
 	 */
 	protected Map<String, String> getReversePairMap()
 	{
@@ -215,24 +228,33 @@ public class CaseFixture<T> {
 	}
 
 	/**
-	 * @return the caseId
+	 * Gets the list of case identifiers.
+	 *
+	 * @return A list containing case identifiers.
 	 */
 	public List<String> getCaseId()
 	{
 		return this.caseId;
 	}
 
+
+	/**
+	 * Retrieves the exemption rule clause.
+	 *
+	 * @return the exemption rule clause.
+	 */
 	public String getExemptRule()
 	{
 		return this.exemptRule;
 	}
 
 	/**
-	 * @return the ruleConverter
+	 * Gets the list of case identifiers.
+	 *
+	 * @return A list containing case identifiers.
 	 */
 	public Map<String, ElementConverter> getRuleConverter()
 	{
 		return this.ruleConv;
 	}
-
 }

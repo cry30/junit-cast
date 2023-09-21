@@ -2,7 +2,6 @@ package io.github.roycetech.junitcast;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -23,16 +22,22 @@ import com.google.common.collect.Lists;
 public class ParameterGenerator<T> {
 
 	/**
+	 * Default constructor that doesn't provide any customization.
+	 */
+	public ParameterGenerator() {
+	}
+
+	/**
 	 * Generate parameters from set of variables. This will calculate every possible
 	 * combination minus any defined exemption.
 	 *
 	 * @param resourceUri resource bundle URI.
+	 * @return the generated list of of scenario tokens.
 	 */
 	public Collection<Object[]> genVarData(final String resourceUri)
 	{
 		final ResourceFixture resFixFactory = new ResourceFixture(resourceUri);
-		@SuppressWarnings("unchecked")
-		final List<CaseFixture<T>> fixtures = (List<CaseFixture<T>>) resFixFactory.getFixtures();
+		@SuppressWarnings("unchecked") final List<CaseFixture<T>> fixtures = (List<CaseFixture<T>>) resFixFactory.getFixtures();
 		return generateData(fixtures);
 	}
 
@@ -40,6 +45,7 @@ public class ParameterGenerator<T> {
 	 * Generate parameters from a fixed set of test data.
 	 *
 	 * @param resourceUri resource bundle URI.
+	 * @return the list of scenario tokens computed from a fixed list of variables.
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<Object[]> genFixedData(final String resourceUri)
@@ -49,7 +55,10 @@ public class ParameterGenerator<T> {
 	}
 
 	/**
+	 * Generates the parameters list based on the product of the variables in the fixture list.
+	 *
 	 * @param fixTureList list of test cases.
+	 * @return the list of scenario tokens.
 	 */
 	public Collection<Object[]> generateData(final List<CaseFixture<T>> fixTureList)
 	{
@@ -57,12 +66,15 @@ public class ParameterGenerator<T> {
 	}
 
 	/**
+	 * Computes the actual list of scenario tokens.
+	 *
 	 * @param fixTureList list of test cases.
 	 * @param isComputed  false when data is fixed list other wise it is the
 	 *                    combination of all variables.
+	 * @return the list of scenario tokens to be used as parameters in the test.
 	 */
 	public Collection<Object[]> generateData(final List<CaseFixture<T>> fixTureList,
-			final boolean isComputed)
+											 final boolean isComputed)
 	{
 		final List<Object[]> retval = new ArrayList<>();
 		for (final CaseFixture<T> caseFixture : fixTureList) {
@@ -74,9 +86,9 @@ public class ParameterGenerator<T> {
 		}
 
 		if (isComputed) {
-			Collections.sort(retval, new Comparator<>() {
+			retval.sort(new Comparator<>() {
 				@Override
-				@SuppressWarnings({ "PMD.UseVarargs", "unchecked" })
+				@SuppressWarnings({"PMD.UseVarargs", "unchecked"})
 				public int compare(final Object[] paramArr1, final Object[] paramArr2)
 				{
 					final Parameter<T> param1 = (Parameter<T>) paramArr1[0];
@@ -100,8 +112,8 @@ public class ParameterGenerator<T> {
 		for (final List<T> scenario : combinations) {
 			if (isValidCase(scenario, caseFixture)) {
 				final String result = validateRule(scenario, caseFixture);
-				paramCollection.add(new Object[] { new Parameter<>(caseFixture.getCaseDesc(),
-						scenario, result, caseFixture.getCaseId()) });
+				paramCollection.add(new Object[]{new Parameter<>(caseFixture.getCaseDesc(),
+					scenario, result, caseFixture.getCaseId())});
 			}
 
 		}
@@ -115,11 +127,10 @@ public class ParameterGenerator<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	private void addFixedCase(final List<Object[]> paramCollection,
-			final CaseFixture<T> caseFixture)
+							  final CaseFixture<T> caseFixture)
 	{
 		for (final List<T> scenario : caseFixture.getVariables()) {
-			@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-			final List<?> scenList = new ArrayList<>(scenario);
+			@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops") final List<T> scenList = new ArrayList<>(scenario);
 
 			final String matched = caseFixture.getRuleOutcome((List<String>) scenario);
 
@@ -134,28 +145,27 @@ public class ParameterGenerator<T> {
 				result = matched;
 			}
 			Assert.assertNotNull("Scenario must fall into a unique rule output/clause: " + scenario
-					+ " did not match", result);
+				+ " did not match", result);
 
-			paramCollection.add(new Object[] { new Parameter<>(caseFixture.getCaseDesc(),
-					(List<T>) scenList, result, caseFixture.getCaseId()) });
+			paramCollection.add(new Object[]{new Parameter<>(caseFixture.getCaseDesc(),
+				scenList, result, caseFixture.getCaseId())});
 		}
 	}
 
 	/**
-	 * Assertion exception when rule failed. Otherwise the single rule that
-	 * succeeded is returned.
+	 * If the rule fails, an assertion exception is thrown. Otherwise, the single successful rule is returned.
 	 *
 	 * @param scenario current Test scenario.
 	 * @param fixture  test fixture.
+	 * @return the single rule that satisfies the given scenario.
 	 */
 	public String validateRule(final List<T> scenario, final CaseFixture<T> fixture)
 	{
 		final Rule rule = fixture.getRule();
 		String retval = null; // NOPMD: null default, conditionally redefine.
-		@SuppressWarnings("unchecked")
-		final List<Object> scenarioObjects = (List<Object>) scenario;
+		@SuppressWarnings("unchecked") final List<Object> scenarioObjects = (List<Object>) scenario;
 		final Boolean[] ruleResult = new RuleProcessor(rule, fixture.getRuleConverter())
-				.evaluate(scenarioObjects);
+			.evaluate(scenarioObjects);
 		final List<String> outcomes = new ArrayList<>(rule.getOutcomes());
 		final boolean singleResult = rule.getOutcomes().size() == 1;
 		if (singleResult) {
@@ -175,18 +185,19 @@ public class ParameterGenerator<T> {
 		}
 
 		Assert.assertEquals("Scenario must fall into a unique rule output/clause: " + scenario
-				+ ", matched: " + matchedOutputs, 1, matchCount);
+			+ ", matched: " + matchedOutputs, 1, matchCount);
 		return retval;
 	}
 
 	/**
+	 * Computes the expected output based on the given rule output and expectation.
 	 *
 	 * @param ruleOutput output default output specified by the binary rule.
 	 * @param fixture    test case fixture.
 	 * @param expected   expected output.
 	 */
 	/* default */ String getBinaryOutput(final String ruleOutput, final CaseFixture<T> fixture,
-			final boolean expected)
+										 final boolean expected)
 	{
 		final boolean isNegative = fixture.getPairMap().containsKey(ruleOutput);
 		if (isNegative) {
@@ -205,8 +216,11 @@ public class ParameterGenerator<T> {
 	}
 
 	/**
+	 * Retrieves the opposite of a rule.
+	 *
 	 * @param ruleOutput output default output specified by the binary rule.
 	 * @param fixture    test case fixture.
+	 * @return the binary opposite of the given {@code ruleOutput}
 	 */
 	/* default */ String getOpposite(final String ruleOutput, final CaseFixture<T> fixture)
 	{
@@ -222,7 +236,9 @@ public class ParameterGenerator<T> {
 	 *
 	 * @param scenario current Test scenario.
 	 * @param fixture  test case fixture.
+	 * @return the result of the validation.
 	 */
+	@SuppressWarnings("unchecked")
 	private boolean isValidCase(final List<T> scenario, final CaseFixture<T> fixture)
 	{
 		if (fixture.getExemptRule() == null) {

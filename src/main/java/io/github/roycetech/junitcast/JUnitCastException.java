@@ -16,11 +16,7 @@
 package io.github.roycetech.junitcast;
 
 /**
- *
- * <pre>
- * &#64;author $Author$
- * @version $Date$
- * </pre>
+ * Application wrapper for the RuntimeException.
  */
 public class JUnitCastException extends RuntimeException {
 

@@ -25,7 +25,9 @@ public class ScenarioSourceTest
 		super(pParameter);
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
@@ -48,7 +50,9 @@ public class ScenarioSourceTest
 		return new ParameterGenerator<String>().genVarData(currentClassName);
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void prepare()
 	{
@@ -92,7 +96,9 @@ public class ScenarioSourceTest
 		}
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void execute()

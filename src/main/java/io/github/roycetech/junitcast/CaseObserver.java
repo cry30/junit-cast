@@ -16,6 +16,7 @@
 package io.github.roycetech.junitcast;
 
 /**
+ * Allows encapsulation of preparation routine, receiving the scenario index and the token.
  *
  * @param <S> scenario parameter type. Normally String.
  */

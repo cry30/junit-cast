@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import io.github.roycetech.junitcast.AbstractTransientValueTestCase;
+import io.github.roycetech.junitcast.MockitoHelper;
 import io.github.roycetech.junitcast.Parameter;
 import io.github.roycetech.junitcast.ParameterGenerator;
 
@@ -13,20 +14,23 @@ import org.junit.runners.Parameterized.Parameters;
  * Template Test class.
  */
 public class TemplateTest extends
-		AbstractTransientValueTestCase<Template, String, String> {
 
+	AbstractTransientValueTestCase<Template, String, String> {
 	/**
 	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
 	 */
-	public TemplateTest(final Parameter<String> pParameter) {
+	public TemplateTest(final Parameter<String> pParameter)
+	{
 		super(pParameter);
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
-		setMockSubject(new Template());
+		new MockitoHelper().setupTargetObject(this, constructorParams);
 	}
 
 	/**
@@ -45,7 +49,9 @@ public class TemplateTest extends
 		return new ParameterGenerator<String>().genVarData(currentClassName);
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void prepare()
 	{
@@ -54,7 +60,9 @@ public class TemplateTest extends
 		}
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void execute()
 	{

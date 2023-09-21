@@ -1,18 +1,3 @@
-/**
- *  Copyright 2013 Royce Remulla
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package io.github.roycetech.junitcast.example;
 
 import java.util.Collection;
@@ -33,15 +18,20 @@ import io.github.roycetech.junitcast.example.MultiType.Position;
  * Test class for MultiType.
  */
 public class MultiTypeTest extends
-		AbstractTransientValueTestCase<MultiType, Object, Object> {
+	AbstractTransientValueTestCase<MultiType, Object, Object> {
 
 
-	/** @param pParameter Data Transfer Object Parameter in Parameterized test. */
-	public MultiTypeTest(final Parameter<Object> pParameter) {
+	/**
+	 * @param pParameter Data Transfer Object Parameter in Parameterized test.
+	 */
+	public MultiTypeTest(final Parameter<Object> pParameter)
+	{
 		super(pParameter);
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void setupTargetObject(final List<Object> constructorParams)
 	{
@@ -64,7 +54,9 @@ public class MultiTypeTest extends
 		return new ParameterGenerator<String>().genVarData(currentClassName);
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void prepare()
 	{
@@ -80,33 +72,35 @@ public class MultiTypeTest extends
 		setTransientValue(Argument.Grade.ordinal(), grade);
 
 		Mockito.doAnswer(new Answer<Object>() {
-			@Override
-			public Object answer(final InvocationOnMock invocation)
+				@Override
+				public Object answer(final InvocationOnMock invocation)
 					throws Throwable
-			{
-				setResult("ACCEPT");
-				return null;
-			}
-		})
+				{
+					setResult("ACCEPT");
+					return null;
+				}
+			})
 			.when(getMockSubject())
 			.recruit();
 
 		Mockito.doAnswer(new Answer<Object>() {
-			@Override
-			public Object answer(final InvocationOnMock invocation)
+				@Override
+				public Object answer(final InvocationOnMock invocation)
 					throws Throwable
-			{
-				setResult("DECLINE");
-				return null;
-			}
-		})
+				{
+					setResult("DECLINE");
+					return null;
+				}
+			})
 			.when(getMockSubject())
 			.reject();
 
 
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void execute()
 	{
@@ -117,10 +111,13 @@ public class MultiTypeTest extends
 		getMockSubject().applyForJob(position, grade);
 	}
 
-	/** */
+	/**
+	 *
+	 */
 	enum Argument {
-		/** */
+		/**
+		 *
+		 */
 		Position, Grade
 	}
-
 }

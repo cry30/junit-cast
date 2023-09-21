@@ -1,6 +1,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/maintainability)](https://codeclimate.com/github/roycetech/junit-cast/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/33f6b1ec8bd617111960/test_coverage)](https://codeclimate.com/github/roycetech/junit-cast/test_coverage)
 [![CircleCI](https://dl.circleci.com/status-badge/img/circleci/8icWCYAEYCg5qEpZBqxQK1/4oRakASGeyEGFn55CaDJdK/tree/master.svg?style=svg&circle-token=cab96ffce5a3b5ee4869faa6a7f0926413465b2e)](https://dl.circleci.com/status-badge/redirect/circleci/8icWCYAEYCg5qEpZBqxQK1/4oRakASGeyEGFn55CaDJdK/tree/master)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.roycetech/junit-cast?link=https%3A%2F%2Fcentral.sonatype.com%2Fartifact%2Fio.github.roycetech%2Fjunit-cast)
 
 # JUnit Cast
 

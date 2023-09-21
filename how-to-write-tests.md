@@ -25,8 +25,8 @@ false bucket, and the values **0** and **1** to the **true** bucket.
 
 ```properties
 rule0=\
-false:1|4|5551\
-~true:2|3|5|3331
+false:-4
+~true:0, 1
 ```
 
 The buckets are delimited by the tilde character, and the basic logical 
@@ -48,20 +48,10 @@ With the parameters and rules now established, we can proceed to create the JUni
 test java file, which will determine the behavior of our subject in accordance 
 with these parameters.
 
-1. Create a new JUnit test file from the [template](./src/main/resources/templateTest.tpl)
+1. Create a new JUnit test file from the [template](./src/main/resources/TemplateTest.java)
 and update with the necessary type arguments.
 
-2. Set our subject by instantiating inside `setupTargetObject`
-
-```java
-   setMockSubject(new Positivity());
-```
-
-3.  Connect our properties file so we can generate the inputs and know about the rules.
-
-```java
-return new ParameterGenerator<Integer>().genVarData("io.github.roycetech.junitcast.example.PrimeNumberTest");
-```
+2. Update the generic types to reflect the subject class being tested.
 
 4.  Inside our **prepare** method, we can go through all the possible scenarios. 
 Let's store each token into a temporary location so that we can access those inside the execution method:

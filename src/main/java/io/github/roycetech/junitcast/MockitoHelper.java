@@ -31,10 +31,12 @@ public class MockitoHelper {
 	/**
 	 * Default constructor with doesn't do any customization.
 	 */
-	public MockitoHelper() {}
+	public MockitoHelper() {
+	}
 
 	/**
-	 * Sets up the test subject by inspecting the defined class types, and creating the spy object for easy stubbing of dependent components.
+	 * Sets up the test subject by inspecting the defined class types, and creating
+	 * the spy object for easy stubbing of dependent components.
 	 *
 	 * @param <T>               Test Object instance type. Does not support generic
 	 *                          types, you can omit the generic argument of test
@@ -44,7 +46,7 @@ public class MockitoHelper {
 	 * @param constructorParams test subject constructor parameters.
 	 */
 	public <T> void setupTargetObject(final AbstractTestCase<T, ?> testCase,
-									  final List<Object> constructorParams)
+			final List<Object> constructorParams)
 	{
 		try {
 
@@ -56,23 +58,23 @@ public class MockitoHelper {
 			} else {
 				final int parameterCount = constructorParams.size();
 				final Object[] constructorParamsArray = constructorParams
-					.toArray(new Object[parameterCount]);
+						.toArray(new Object[parameterCount]);
 				realSubject = constructor.newInstance(constructorParamsArray);
 			}
 			testCase.setRealSubject(realSubject);
 			testCase.setMockSubject(Mockito.spy(testCase.getRealSubject()));
 		} catch (final InvocationTargetException | IllegalArgumentException | InstantiationException
-					   | IllegalAccessException any) {
+				| IllegalAccessException any) {
 			throw new JUnitCastException(any);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> Constructor<T> computeConstructor(final AbstractTestCase<T, ?> testCase,
-												  final List<Object> constructorParameters)
+			final List<Object> constructorParameters)
 	{
 		final List<Object> computedParameters = constructorParameters == null ? new ArrayList<>()
-			: constructorParameters;
+				: constructorParameters;
 		if (computedParameters.isEmpty()) {
 			return (Constructor<T>) testCase.getSubjectType().getDeclaredConstructors()[0];
 		}

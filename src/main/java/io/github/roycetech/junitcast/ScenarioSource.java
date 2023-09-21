@@ -34,7 +34,7 @@ public class ScenarioSource<S> {
 	private final transient AbstractTestCase<?, S> testCase;
 
 	/**
-	 *
+	 * 
 	 */
 	@SuppressWarnings("rawtypes")
 	private final transient Map<Enum, List<CaseObserver<S>>> enumObsMap = new ConcurrentHashMap<>();
@@ -57,7 +57,7 @@ public class ScenarioSource<S> {
 	/**
 	 * By convention, accessible Variable enum defined on the test class.
 	 *
-	 * @param pTestCase the test class usually "this". Not null.
+	 * @param pTestCase   the test class usually "this". Not null.
 	 * @param _pVarSource optional variable source that is unused for now.
 	 */
 	public ScenarioSource(final AbstractTestCase<?, S> pTestCase, final Object _pVarSource) {
@@ -95,7 +95,7 @@ public class ScenarioSource<S> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <C extends Enum<C>, T> void addTransientCase(final T key, final CaseParser caseParser,
-														final C... cases)
+			final C... cases)
 	{
 		addTransientCase(key, (Object) caseParser, cases);
 	}
@@ -132,7 +132,7 @@ public class ScenarioSource<S> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <C extends Enum<C>, T> void addTransientCase(final T key, final Object value,
-														final C... cases)
+			final C... cases)
 	{
 		for (final C nextCase : cases) {
 			addObserver(nextCase, createNewCase(nextCase, key, value));
@@ -150,7 +150,7 @@ public class ScenarioSource<S> {
 	 * @return A new CaseObserver instance.
 	 */
 	/* default */ <T, C extends Enum<C>> CaseObserver<S> createNewCase(final C nextCase,
-																	   final T key, final Object value)
+			final T key, final Object value)
 	{
 		return new CaseObserver<>() {
 
@@ -178,7 +178,7 @@ public class ScenarioSource<S> {
 	 * @param cases the varargs of cases to check.
 	 */
 	/* default */ <C extends Enum<C>> void checkValidTestCase(
-		@SuppressWarnings("unchecked") final C... cases)
+			@SuppressWarnings("unchecked") final C... cases)
 	{
 		if (cases == null || cases.length == 0) {
 			throw new IllegalArgumentException("Must have at least one valid case.");
@@ -225,7 +225,7 @@ public class ScenarioSource<S> {
 	 * @param caseObsList the observers list.
 	 */
 	private void prepareObserver(final S nextCase, final int scenarioIndex,
-								 final List<CaseObserver<S>> caseObsList)
+			final List<CaseObserver<S>> caseObsList)
 	{
 		if (caseObsList != null) {
 			for (final CaseObserver<S> nextCaseObserver : caseObsList) {

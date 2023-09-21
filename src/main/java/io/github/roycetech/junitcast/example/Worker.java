@@ -43,7 +43,7 @@ public class Worker {
 
 
 	/**
-	 * True if all of these rules are satisfied: <br/>
+	 * True if all of these rules are satisfied:
 	 * <ul>
 	 * 	<li>Monday to Saturday.
 	 *  <li>Not Holiday

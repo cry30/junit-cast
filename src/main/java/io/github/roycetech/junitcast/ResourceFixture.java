@@ -175,6 +175,8 @@ public class ResourceFixture {
 
 	/**
 	 * Retrieves the list of test fixtures.
+	 *
+	 * @return the list of test fixtures.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<?> getFixtures()

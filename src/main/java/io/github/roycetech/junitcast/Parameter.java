@@ -124,6 +124,8 @@ public class Parameter<E> {
 	}
 
 	/**
+	 * Retrieves the case description.
+	 *
 	 * @return the caseDesc
 	 */
 	public String getCaseDesc()

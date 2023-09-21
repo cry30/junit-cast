@@ -225,7 +225,7 @@ public class ResourceFixture {
 	}
 
 	/**
-	 *
+	 * Retrieves the variables, and generates the product as needed, for the configured variables.
 	 *
 	 * @param caseIndex  case index.
 	 * @param key        resource key.

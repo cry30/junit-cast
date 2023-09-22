@@ -13,11 +13,13 @@ This project was created 10 years ago to help test a rule-heavy business logic.
 
 It works well when testing functions that receive an input or a set of inputs, and then an output is expected as a function return or a change in state.
 
-It follows the AAA pattern in unit testing which I find confusing, so in this case, I called it a PEA-pattern (Prepare, Execute, and Assert). With this library, assertion is not even necessary, but I've included it for the sake of completeness.
+It follows the AAA pattern in unit testing which I find confusing, so in this case, I called it a PEA-pattern (Prepare, Execute, and Assert). With this library, assertion is implicit.
 
-## How to use this library
+## How to write a test using this library
 
-See the document: [How to write tests](./how-to-write-tests.md)
+<iframe src="https://drive.google.com/file/d/12Ppf9YipPJ3bquL-tYcocS9Gn6QYHizO/preview" width="640" height="480"></iframe>
+
+[Text example](./how-to-write-tests.md)
 
 ## How to use this project
 

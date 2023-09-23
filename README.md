@@ -15,7 +15,7 @@ It works well when testing functions that receive an input or a set of inputs, a
 
 It follows the AAA pattern in unit testing, which I find confusing, so in this case, I called it a PEA-pattern (Prepare, Execute, and Assert). With this library, assertion is implicit.
 
-## How to use write a test
+## How to write a test
 
 ![](./assets/images/demo-short.gif)
 [How to write tests - Text Version](./how-to-write-tests.md)
